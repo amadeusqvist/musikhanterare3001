@@ -1,4 +1,4 @@
-import { Queue, empty as emptyQueue } from './lib/queue_array';
+import { Queue, empty as emptyQueue, is_empty as is_empty_queue, dequeue, head as qhead } from './lib/queue_array';
 import {type List} from './lib/list';
 import { type Stack, push} from './lib/stack';
 import * as PromptSync from "prompt-sync";
@@ -25,7 +25,9 @@ type Playlist =  {
   currentSongIndex: number; 
 }
 
-type songQueue = Queue<Song>;
+type SongQueue = Queue<Song>;
+
+const queue_temporary_testing: songQueue = emptyQueue();
 
 /**
  * Creates a fresh playlist.
@@ -112,14 +114,48 @@ function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
  * Plays the next song in the playlist.
  * @param playlist - The playlist.
  */
-function playNextSong(playlist: Playlist): void {
+function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
+  if (is_empty_queue(songQueue)) {
+    const currentIndex = playlist.currentSongIndex;
+    if (playlist.songs[currentIndex] === playlist.songs[-1]) {
+      const currentIndex = 0;
+      const currentSong = playlist.songs[currentIndex];
+
+      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+
+      return {...playlist, currentSongIndex: currentIndex};
+    } else {
+      const currentSong = playlist.songs[currentIndex + 1];
+      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+
+      return {...playlist, currentSongIndex: currentIndex + 1};
+    }
+
+    
+  } else {
+    const currentSong = qhead(songQueue);
+    dequeue(songQueue);
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return playlist;
+  }
 }
 
 /**
  * Plays the previous song in the playlist.
  * @param playlist - The playlist.
  */
-function playPreviousSong(playlist: Playlist): void {    
+function playPreviousSong(playlist: Playlist): Playlist {
+  if (playlist.currentSongIndex === 0) {
+    const currentIndex = playlist.songs.length;
+    const currentSong = playlist.songs[currentIndex];
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return {...playlist, currentSongIndex: currentIndex}
+  } else {
+    const currentIndex = playlist.currentSongIndex - 1;
+    const currentSong = playlist.songs[currentIndex];
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return {...playlist, currentSongIndex: currentIndex}
+  }
     
 }
 

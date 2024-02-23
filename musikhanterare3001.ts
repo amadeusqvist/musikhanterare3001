@@ -92,7 +92,10 @@ function playSong(playlist: Playlist, songIndex: number): Playlist {
  * @param playlist - The playlist.
  */
 function playNextSong(playlist: Playlist): void {
-  //frästigkommentar
+<<<<<<< HEAD
+=======
+  // Implemented  
+>>>>>>> 732a75c240db142219bf1e089495cbdc7cb1b31c
 }
 
 /**

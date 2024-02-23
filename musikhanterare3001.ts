@@ -83,8 +83,29 @@ function playPlaylist(playlist: Playlist): Playlist {
   return playlist;
 }
 
-function playSong(playlist: Playlist, songIndex: number): Playlist {
-//Fräsigkommetnarafodnojad
+function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
+  console.log('${playlist.name}')
+  for (let i = 0; i < playlist.songs.length; i = i + 1) {
+    console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
+  }
+  
+  const userInput = prompt('Enter the number of the song you wish to play: ');
+  const songNumber = parseInt(userInput);
+
+  if (isNaN(songNumber) || songNumber < 1 || songNumber > playlist.songs.length) {
+    console.log('Invalid song number.');
+    return playlist;
+  }
+
+  // Set the current song index
+  const currentSongIndex = songNumber - 1;
+  const currentSong = playlist.songs[currentSongIndex];
+
+  // Display currently playing song
+  console.log('Currently playing: ${currentSong.title} - ${currentSong.artist}');
+
+  return { ...playlist, currentSongIndex };
+  
 }
 
 /**
@@ -164,3 +185,5 @@ console.log('6. Köa låt')
 
 
 // En terminal loop med en meny
+
+

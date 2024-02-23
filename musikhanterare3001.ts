@@ -1,4 +1,4 @@
-import { Queue, empty as emptyQueue } from './lib/queue_array';
+import { Queue, empty as emptyQueue, is_empty as is_empty_queue, dequeue, head as qhead } from './lib/queue_array';
 import {type List} from './lib/list';
 import { type Stack, push} from './lib/stack';
 import * as PromptSync from "prompt-sync";
@@ -26,6 +26,8 @@ type Playlist =  {
 }
 
 type songQueue = Queue<Song>;
+
+const queue_temporary_testing: songQueue = emptyQueue();
 
 /**
  * Creates a fresh playlist.
@@ -91,14 +93,38 @@ function playSong(playlist: Playlist, songIndex: number): Playlist {
  * Plays the next song in the playlist.
  * @param playlist - The playlist.
  */
-function playNextSong(playlist: Playlist): void {
+function playNextSong(playlist: Playlist): Playlist {
+  if (is_empty_queue(queue_temporary_testing)) {
+    const currentIndex = playlist.currentSongIndex;
+    if (playlist.songs[currentIndex] === playlist.songs[-1]) {
+      const currentIndex = 0;
+      const currentSong = playlist.songs[currentIndex];
+
+      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+
+      return {...playlist, currentSongIndex: currentIndex};
+    } else {
+      const currentSong = playlist.songs[currentIndex + 1];
+      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+
+      return {...playlist, currentSongIndex: currentIndex + 1};
+    }
+
+    
+  } else {
+    const currentSong = qhead(queue_temporary_testing);
+    dequeue(queue_temporary_testing);
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return playlist;
+  }
 }
 
 /**
  * Plays the previous song in the playlist.
  * @param playlist - The playlist.
  */
-function playPreviousSong(playlist: Playlist): void {    
+function playPreviousSong(playlist: Playlist): void {
+  if     
     
 }
 

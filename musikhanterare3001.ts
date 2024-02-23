@@ -1,7 +1,7 @@
 import { Queue, empty as emptyQueue } from './lib/queue_array';
 import {type List} from './lib/list';
 import { type Stack, push} from './lib/stack';
-import PromptSync = require("prompt-sync");
+import * as PromptSync from "prompt-sync";
 
 const prompt: PromptSync.Prompt = PromptSync({sigint:true});
 

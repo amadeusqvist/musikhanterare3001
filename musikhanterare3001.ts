@@ -20,8 +20,9 @@ type Song = {
  * queuing songs, and the index of the currently playing song.
  */
 type Playlist =  { 
-    songs: Array<Song>;
-    currentSongIndex: number; 
+  name: string;
+  songs: Array<Song>;
+  currentSongIndex: number; 
 }
 
 type songQueue = Queue<Song>;
@@ -30,8 +31,9 @@ type songQueue = Queue<Song>;
  * Creates a fresh playlist.
  * @returns An empty playlist.
  */
-function createEmptyPlaylist(): Playlist {
+function createEmptyPlaylist(nameOfPlaylist: string): Playlist {
   return {
+    name: nameOfPlaylist,
     songs: [],
     currentSongIndex: -1,
   };
@@ -65,16 +67,24 @@ function removeSong(playlist: Playlist, songIndex: number): Playlist {
 }
 
 /**
- * Plays the current song in the playlist.
+ * Always plays the first song in the playlist.
  * @param playlist - The playlist.
  */
-function playSong(playlist: Playlist): Playlist {
-  const currentSong = playlist.songs[playlist.currentSongIndex];
-
-  if (currentSong) {
-    console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+function playPlaylist(playlist: Playlist): Playlist {
+  if (playlist.songs === null) {
+    console.log('Playlist is empty');
+    return playlist;
   }
-  return {...playlist, history: updatedHistory}
+
+  const currentSong = playlist.songs[0];
+
+  console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+  
+  return playlist;
+}
+
+function playSong(playlist: Playlist, songIndex: number): Playlist {
+
 }
 
 /**

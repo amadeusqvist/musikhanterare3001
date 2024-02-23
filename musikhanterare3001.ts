@@ -25,7 +25,7 @@ type Playlist =  {
   currentSongIndex: number; 
 }
 
-type songQueue = Queue<Song>;
+type SongQueue = Queue<Song>;
 
 const queue_temporary_testing: songQueue = emptyQueue();
 
@@ -114,8 +114,8 @@ function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
  * Plays the next song in the playlist.
  * @param playlist - The playlist.
  */
-function playNextSong(playlist: Playlist): Playlist {
-  if (is_empty_queue(queue_temporary_testing)) {
+function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
+  if (is_empty_queue(songQueue)) {
     const currentIndex = playlist.currentSongIndex;
     if (playlist.songs[currentIndex] === playlist.songs[-1]) {
       const currentIndex = 0;
@@ -133,8 +133,8 @@ function playNextSong(playlist: Playlist): Playlist {
 
     
   } else {
-    const currentSong = qhead(queue_temporary_testing);
-    dequeue(queue_temporary_testing);
+    const currentSong = qhead(songQueue);
+    dequeue(songQueue);
     console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
     return playlist;
   }
@@ -144,8 +144,18 @@ function playNextSong(playlist: Playlist): Playlist {
  * Plays the previous song in the playlist.
  * @param playlist - The playlist.
  */
-function playPreviousSong(playlist: Playlist): void {
-  if     
+function playPreviousSong(playlist: Playlist): Playlist {
+  if (playlist.currentSongIndex === 0) {
+    const currentIndex = playlist.songs.length;
+    const currentSong = playlist.songs[currentIndex];
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return {...playlist, currentSongIndex: currentIndex}
+  } else {
+    const currentIndex = playlist.currentSongIndex - 1;
+    const currentSong = playlist.songs[currentIndex];
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    return {...playlist, currentSongIndex: currentIndex}
+  }
     
 }
 

@@ -95,6 +95,198 @@
             "artist": "Cornelis Vreeswijk",
             "album": "Tio vackra visor och personliga Person",
             "collaborators": []
+        },
+        "17": {
+            "title": "Thunderstruck",
+            "artist": "AC/DC",
+            "album": "The Razors Edge",
+            "collaborators": []
+        },
+        "18": {
+            "title": "Dreams",
+            "artist": "Fleetwood Mac",
+            "album": "Rumours",
+            "collaborators": []
+        },
+        "19": {
+            "title": "Paint It Black",
+            "artist": "The Rolling Stones",
+            "album": "Aftermath",
+            "collaborators": []
+        },
+        "20": {
+            "title": "Don't Stop Believin'",
+            "artist": "Journey",
+            "album": "Escape",
+            "collaborators": []
+        },
+        "21": {
+            "title": "Hotel California",
+            "artist": "Eagles",
+            "album": "Hotel California",
+            "collaborators": []
+        },
+        "22": {
+            "title": "Dream On",
+            "artist": "Aerosmith",
+            "album": "Aerosmith",
+            "collaborators": []
+        },
+        "23": {
+            "title": "Runaway",
+            "artist": "Bon Jovi",
+            "album": "Bon Jovi",
+            "collaborators": []
+        },
+        "24": {
+            "title": "I Love Rock 'N Roll",
+            "artist": "Joan Jett & the Blackhearts",
+            "album": "I Love Rock 'N Roll",
+            "collaborators": []
+        },
+        "25": {
+            "title": "Stairway to Heaven",
+            "artist": "Led Zeppelin",
+            "album": "Led Zeppelin IV",
+            "collaborators": []
+        },
+        "26": {
+            "title": "Seven Nation Army",
+            "artist": "The White Stripes",
+            "album": "Elephant",
+            "collaborators": []
+        },
+        "27": {
+            "title": "Californication",
+            "artist": "Red Hot Chili Peppers",
+            "album": "Californication",
+            "collaborators": []
+        },
+        "28": {
+            "title": "Come As You Are",
+            "artist": "Nirvana",
+            "album": "Nevermind",
+            "collaborators": []
+        },
+        "29": {
+            "title": "Creep",
+            "artist": "Radiohead",
+            "album": "Pablo Honey",
+            "collaborators": []
+        },
+        "30": {
+            "title": "Giant Steps",
+            "artist": "John Coltrane",
+            "album": "Giant Steps",
+            "collaborators": []
+        },
+        "31": {
+            "title": "Naima",
+            "artist": "John Coltrane",
+            "album": "Giant Steps",
+            "collaborators": []
+        },
+        "32": {
+            "title": "In 'N Out",
+            "artist": "Joe Henderson",
+            "album": "In 'N Out",
+            "collaborators": []
+        },
+        "33": {
+            "title": "Give it One",
+            "artist": "Maynard Ferguson",
+            "album": "The Essential Maynard Ferguson",
+            "collaborators": []
+        },
+        "34": {
+            "title": "So What",
+            "artist": "Miles Davis",
+            "album": "Kind Of Blue",
+            "collaborators": ["John Coltrane", "Cannonball Adderley", "Bill Evans"]
+        },
+        "35": {
+            "title": "Monk's Dream",
+            "artist": "Larry Young",
+            "album": "Unity",
+            "collaborators": []
+        },
+        "36": {
+            "title": "Das' Dat",
+            "artist": "Jackie McLean",
+            "album": "It's Time",
+            "collaborators": []
+        },
+        "37": {
+            "title": "You're My Everything",
+            "artist": "Freddie Hubbard",
+            "album": "Hub-Tones",
+            "collaborators": []
+        },
+        "38": {
+            "title": "Cool Struttin'",
+            "artist": "Sonny Clark",
+            "album": "Cool Struttin'",
+            "collaborators": []
+        },
+        "39": {
+            "title": "Take on Me",
+            "artist": "a-ha",
+            "album": "Hunting High and Low",
+            "collaborators": []
+        },
+        "40": {
+            "title": "Dancing Queen",
+            "artist": "ABBA",
+            "album": "Arrival",
+            "collaborators": []
+        },
+        "41": {
+            "title": "Don't Go Breaking My Heart",
+            "artist": "Elton John",
+            "album": "To Be Continued...",
+            "collaborators": ["Kiki Dee"]
+        },
+        "42": {
+            "title": "You Can Call Me Al",
+            "artist": "Paul Simon",
+            "album": "Graceland",
+            "collaborators": []
+        },
+        "43": {
+            "title": "September",
+            "artist": "Earth, Wind & Fire",
+            "album": "The Best Of Earth, Wind & Fire Vol. 1",
+            "collaborators": []
+        },
+        "44": {
+            "title": "Africa",
+            "artist": "TOTO",
+            "album": "Toto IV",
+            "collaborators": []
+        },
+        "45": {
+            "title": "Uptown Girl",
+            "artist": "Billy Joel",
+            "album": "An Innocent Man",
+            "collaborators": []
+        },
+        "46": {
+            "title": "Piano Man",
+            "artist": "Billy Joel",
+            "album": "Piano Man",
+            "collaborators": []
+        },
+        "47": {
+            "title": "Jump",
+            "artist": "Van Halen",
+            "album": "1984",
+            "collaborators": []
+        },
+        "48": {
+            "title": "Tainted Love",
+            "artist": "Soft Cell",
+            "album": "Non-Stop Erotic Cabaret",
+            "collaborators": []
         }
   }
 }

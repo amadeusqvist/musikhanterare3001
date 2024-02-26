@@ -59,6 +59,42 @@
             "artist": "Artist 10",
             "album": "Album 10",
             "collaborators": ["Collaborator 10A", "Collaborator 10B"]
+        },
+        "11": {
+            "title": "Leevi & the Leavings",
+            "artist": "Vasas flora och fauna",
+            "album": "Släkt med Lotta Svärd",
+            "collaborators": []
+        },
+        "12": {
+            "title": "Det ordnar sig",
+            "artist": "Danne Stråhed",
+            "album": "13 rätt... 13 nya låtar",
+            "collaborators": []
+        },
+        "13": {
+            "title": "På väg",
+            "artist": "Turid",
+            "album": "Tistlar från tundran",
+            "collaborators": []
+        },
+        "14": {
+            "title": "Di tror int när jag säger",
+            "artist": "Vasas flora och fauna",
+            "album": "Släkt med Lotta Svärd",
+            "collaborators": []
+        },
+        "15": {
+            "title": "Fönsterkuvert",
+            "artist": "Danne Stråhed",
+            "album": "Solsång",
+            "collaborators": []
+        },
+        "16": {
+            "title": "Somliga går med trasiga skor",
+            "artist": "Cornelis Vreeswijk",
+            "album": "Tio vackra visor och personliga Person",
+            "collaborators": []
         }
   }
 }

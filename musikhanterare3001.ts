@@ -27,7 +27,7 @@ type Playlist =  {
 
 type SongQueue = Queue<Song>;
 
-const queue_temporary_testing: songQueue = emptyQueue();
+const queue_temporary_testing: SongQueue = emptyQueue();
 
 /**
  * Creates a fresh playlist.
@@ -88,7 +88,7 @@ function playPlaylist(playlist: Playlist): Playlist {
 function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
   console.log('${playlist.name}')
   for (let i = 0; i < playlist.songs.length; i = i + 1) {
-    console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
+console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
   }
   
   const userInput = prompt('Enter the number of the song you wish to play: ');

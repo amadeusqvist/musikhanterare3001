@@ -1,0 +1,64 @@
+{
+    "songs": {
+        "1": {
+            "title": "Strövtåg i hembygden",
+            "artist": "Mando Diao",
+            "album": "Infruset",
+            "collaborators": []
+        },
+        "2": {
+            "title": "Säg mig var du står",
+            "artist": "Carola",
+            "album": "Främling 25 år",
+            "collaborators": []
+        },
+        "3": {
+            "title": "Call Your Girlfriend",
+            "artist": "Robyn",
+            "album": "Body Talk",
+            "collaborators": []
+        },
+        "4": {
+            "title": "Reggaeprofil",
+            "artist": "Governor Andy",
+            "album": "Som Salomos Song",
+            "collaborators": ["Jr Erik"]
+        },
+        "5": {
+            "title": "Backa med släp",
+            "artist": "Academics",
+            "album": "Nånstans i skogen",
+            "collaborators": ["Erk"]
+        },
+        "6": {
+            "title": "Song Title 6",
+            "artist": "Artist 6",
+            "album": "Album 6",
+            "collaborators": ["Collaborator 6A", "Collaborator 6B"]
+        },
+        "7": {
+            "title": "Song Title 7",
+            "artist": "Artist 7",
+            "album": "Album 7",
+            "collaborators": ["Collaborator 7A", "Collaborator 7B"]
+        },
+        "8": {
+            "title": "Song Title 8",
+            "artist": "Artist 8",
+            "album": "Album 8",
+            "collaborators": ["Collaborator 8A", "Collaborator 8B"]
+        },
+        "9": {
+            "title": "Song Title 9",
+            "artist": "Artist 9",
+            "album": "Album 9",
+            "collaborators": ["Collaborator 9A", "Collaborator 9B"]
+        },
+        "10": {
+            "title": "Song Title 10",
+            "artist": "Artist 10",
+            "album": "Album 10",
+            "collaborators": ["Collaborator 10A", "Collaborator 10B"]
+        }
+  }
+}

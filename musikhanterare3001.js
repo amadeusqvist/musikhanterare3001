@@ -146,7 +146,7 @@ function searchSongDatabase(songDatabase, searchTerm) {
         var song = songDatabase.songs[songId];
         var lowercaseTitle = song.title.toLowerCase();
         var lowercaseArtist = song.artist.toLowerCase();
-        if (lowercaseTitle.includes(lowercaseSearchTerm) ||
+        if (lowercaseTitle.includes(lowercaseSearchTerm, undefined) ||
             lowercaseArtist.includes(lowercaseSearchTerm) ||
             song.collaborators.some(function (collaborator) {
                 return collaborator.toLowerCase().includes(lowercaseSearchTerm);

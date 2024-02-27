@@ -157,11 +157,8 @@ function playPreviousSong(playlist: Playlist): Playlist {
     	const currentSong = playlist.songs[currentIndex];
     	console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
     	return {...playlist, currentSongIndex: currentIndex}
-  	}
-    
+  	}    
 }
-
-
 
 /**
  * Searches the database for songs.
@@ -179,7 +176,7 @@ function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Arr
         const lowercaseArtist = song.artist.toLowerCase();
 
         if (
-            lowercaseTitle.includes(lowercaseSearchTerm) ||
+            lowercaseTitle.includes(lowercaseSearchTerm, undefined) ||
             lowercaseArtist.includes(lowercaseSearchTerm) ||
             song.collaborators.some(collaborator =>
                 collaborator.toLowerCase().includes(lowercaseSearchTerm)
@@ -191,8 +188,6 @@ function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Arr
 
     return matchingSongs;
 }
-
-
 
 // Shuffel och sökning ska vara på plats
 

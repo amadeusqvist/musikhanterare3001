@@ -3,5 +3,6 @@
     "target": "es6",
     "module": "CommonJS",
    "strict": true,
+   "lib": ["es6", "dom", "es2016"],
   }
 }

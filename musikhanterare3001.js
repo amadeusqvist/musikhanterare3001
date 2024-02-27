@@ -147,7 +147,7 @@ function searchSongDatabase(songDatabase, searchTerm) {
         var lowercaseTitle = song.title.toLowerCase();
         var lowercaseArtist = song.artist.toLowerCase();
         if (lowercaseTitle.includes(lowercaseSearchTerm) ||
-            lowercaseArtist.includes(lowercaseSearchTerm) || // Fix this line
+            lowercaseArtist.includes(lowercaseSearchTerm) ||
             song.collaborators.some(function (collaborator) {
                 return collaborator.toLowerCase().includes(lowercaseSearchTerm);
             })) {
@@ -156,9 +156,6 @@ function searchSongDatabase(songDatabase, searchTerm) {
     }
     return matchingSongs;
 }
-var searchTerm = 'Governor Andy';
-var searchResult = searchSongDatabase(songDatabase, searchTerm);
-console.log(searchResult);
 // Shuffel och sökning ska vara på plats
 // Josn låtar och artister
 // Testfall för sökning
@@ -173,9 +170,3 @@ console.log(searchResult);
 // nackdelen är att man duplicerar datan och den sparas på två ställen. Säga att spotify tar bort en artist
 // från spotify så måste de ta bort från flera ställen. Enkelt att hitta datan genom att duplicera data.
 // Hårdkorda alla tabeller i en json fil
-// Sök funktioner, artister
-// Spara era egna testfall som skrivs under projketets gång så att ni kan använda de sen 
-// Funktionalitteten av hela koden ska ju beskrivas övergripande, och ni har
-// Vi ska ha kommit långt
-// Programma
-// En terminal loop med en meny

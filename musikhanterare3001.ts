@@ -2,7 +2,6 @@ import { Queue, empty as emptyQueue, is_empty as is_empty_queue, dequeue, head a
 import {type List} from './lib/list';
 import { type Stack, push} from './lib/stack';
 import * as PromptSync from "prompt-sync";
-import * as fs from 'fs'; // Import the Node.js file system module
 
 const prompt: PromptSync.Prompt = PromptSync({sigint:true});
 
@@ -181,7 +180,7 @@ function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Arr
 
         if (
             lowercaseTitle.includes(lowercaseSearchTerm) ||
-            lowercaseArtist.includes(lowercaseSearchTerm) ||  // Fix this line
+            lowercaseArtist.includes(lowercaseSearchTerm) ||
             song.collaborators.some(collaborator =>
                 collaborator.toLowerCase().includes(lowercaseSearchTerm)
             )
@@ -193,10 +192,6 @@ function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Arr
     return matchingSongs;
 }
 
-
-const searchTerm = 'Governor Andy';
-const searchResult = searchSongDatabase(songDatabase, searchTerm);
-console.log(searchResult);
 
 
 // Shuffel och sökning ska vara på plats
@@ -223,18 +218,5 @@ console.log(searchResult);
 // nackdelen är att man duplicerar datan och den sparas på två ställen. Säga att spotify tar bort en artist
 // från spotify så måste de ta bort från flera ställen. Enkelt att hitta datan genom att duplicera data.
 // Hårdkorda alla tabeller i en json fil
-
-// Sök funktioner, artister
-
-// Spara era egna testfall som skrivs under projketets gång så att ni kan använda de sen 
-
-// Funktionalitteten av hela koden ska ju beskrivas övergripande, och ni har
-
-// Vi ska ha kommit långt
-
-// Programma
-
-
-// En terminal loop med en meny
 
 

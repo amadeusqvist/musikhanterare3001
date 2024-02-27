@@ -2,6 +2,7 @@ import { Queue, empty as emptyQueue, is_empty as is_empty_queue, dequeue, head a
 import {type List} from './lib/list';
 import { type Stack, push} from './lib/stack';
 import * as PromptSync from "prompt-sync";
+import * as fs from 'fs'; // Import the Node.js file system module
 
 const prompt: PromptSync.Prompt = PromptSync({sigint:true});
 
@@ -9,10 +10,10 @@ const prompt: PromptSync.Prompt = PromptSync({sigint:true});
  * Stores information about a song including title, artist, and album if any.
  */
 type Song = {
-  title: string;
-  artist: string;
-  album: string;
-  collaborators: List<string>
+    title: string;
+    artist: string;
+    album: string;
+    collaborators: Array<string>
 };
 
 /**
@@ -20,25 +21,27 @@ type Song = {
  * queuing songs, and the index of the currently playing song.
  */
 type Playlist =  { 
-  name: string;
-  songs: Array<Song>;
-  currentSongIndex: number; 
+    name: string;
+    songs: Array<Song>;
+    currentSongIndex: number; 
 }
 
-type SongQueue = Queue<Song>;
+interface SongDatabase {
+    songs: Record<string, Song>;
+};
 
-const queue_temporary_testing: songQueue = emptyQueue();
+type SongQueue = Queue<Song>;
 
 /**
  * Creates a fresh playlist.
  * @returns An empty playlist.
  */
 function createEmptyPlaylist(nameOfPlaylist: string): Playlist {
-  return {
-    name: nameOfPlaylist,
-    songs: [],
-    currentSongIndex: -1,
-  };
+    return {
+        name: nameOfPlaylist,
+        songs: [],
+        currentSongIndex: -1,
+    };
 }
 
 /**
@@ -48,9 +51,9 @@ function createEmptyPlaylist(nameOfPlaylist: string): Playlist {
  * @param song - The song to be added.
  * @returns The updated playlist.
  */
-function addSong(playlist: Playlist, song: Song): Playlist {
-  const updatedSongs = playlist.songs.concat(song);
-  return { ...playlist, songs: updatedSongs };
+function addSong(playlist: Playlist, searchTerm: string, songDatabase: SongDatabase): Playlist {
+    const updatedSongs = playlist.songs.concat();
+    return { ...playlist, songs: updatedSongs };
 }
 
 /**
@@ -61,11 +64,11 @@ function addSong(playlist: Playlist, song: Song): Playlist {
  * @returns The updated playlist.
  */
 function removeSong(playlist: Playlist, songIndex: number): Playlist {
-  const updatedSongs = [
-    ...playlist.songs.slice(0, songIndex),
-    ...playlist.songs.slice(songIndex + 1)
-  ];
-  return { ...playlist, songs: updatedSongs };
+    const updatedSongs = [
+        ...playlist.songs.slice(0, songIndex),
+        ...playlist.songs.slice(songIndex + 1)
+    ];
+    return { ...playlist, songs: updatedSongs };
 }
 
 /**
@@ -73,41 +76,41 @@ function removeSong(playlist: Playlist, songIndex: number): Playlist {
  * @param playlist - The playlist.
  */
 function playPlaylist(playlist: Playlist): Playlist {
-  if (playlist.songs === null) {
-    console.log('Playlist is empty');
-    return playlist;
-  }
+    if (playlist.songs === null) {
+        console.log('Playlist is empty');
+        return playlist;
+    }
 
-  const currentSong = playlist.songs[0];
+    const currentSong = playlist.songs[0];
+    playlist.currentSongIndex = 0;
 
-  console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
   
-  return playlist;
+    return playlist;
 }
 
 function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
-  console.log('${playlist.name}')
-  for (let i = 0; i < playlist.songs.length; i = i + 1) {
-    console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
-  }
+    console.log('${playlist.name}')
+    for (let i = 0; i < playlist.songs.length; i = i + 1) {
+        console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
+    }
   
-  const userInput = prompt('Enter the number of the song you wish to play: ');
-  const songNumber = parseInt(userInput);
+    const userInput = prompt('Enter the number of the song you wish to play: ');
+    const songNumber = parseInt(userInput);
 
-  if (isNaN(songNumber) || songNumber < 1 || songNumber > playlist.songs.length) {
-    console.log('Invalid song number.');
-    return playlist;
-  }
+    if (isNaN(songNumber) || songNumber < 1 || songNumber > playlist.songs.length) {
+        console.log('Invalid song number.');
+        return playlist;
+    }
 
-  // Set the current song index
-  const currentSongIndex = songNumber - 1;
-  const currentSong = playlist.songs[currentSongIndex];
+    // Set the current song index
+    const currentSongIndex = songNumber - 1;
+    const currentSong = playlist.songs[currentSongIndex];
 
-  // Display currently playing song
-  console.log('Currently playing: ${currentSong.title} - ${currentSong.artist}');
+    // Display currently playing song
+    console.log('Currently playing: ${currentSong.title} - ${currentSong.artist}');
 
-  return { ...playlist, currentSongIndex };
-  
+    return { ...playlist, currentSongIndex };  
 }
 
 /**
@@ -115,29 +118,29 @@ function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
  * @param playlist - The playlist.
  */
 function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
-  if (is_empty_queue(songQueue)) {
-    const currentIndex = playlist.currentSongIndex;
-    if (playlist.songs[currentIndex] === playlist.songs[-1]) {
-      const currentIndex = 0;
-      const currentSong = playlist.songs[currentIndex];
+    if (is_empty_queue(songQueue)) {
+        const currentIndex = playlist.currentSongIndex;
+        if (playlist.songs[currentIndex] === playlist.songs[-1]) {
+            const currentIndex = 0;
+            const currentSong = playlist.songs[currentIndex];
 
-      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
 
-      return {...playlist, currentSongIndex: currentIndex};
-    } else {
-      const currentSong = playlist.songs[currentIndex + 1];
-      console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+            return {...playlist, currentSongIndex: currentIndex};
+        } else {
+			const currentSong = playlist.songs[currentIndex + 1];
+            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
 
-      return {...playlist, currentSongIndex: currentIndex + 1};
-    }
+            return {...playlist, currentSongIndex: currentIndex + 1};
+        }
 
     
-  } else {
-    const currentSong = qhead(songQueue);
-    dequeue(songQueue);
-    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-    return playlist;
-  }
+    } else {
+		const currentSong = qhead(songQueue);
+        dequeue(songQueue);
+        console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+        return playlist;
+    }
 }
 
 /**
@@ -145,43 +148,55 @@ function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
  * @param playlist - The playlist.
  */
 function playPreviousSong(playlist: Playlist): Playlist {
-  if (playlist.currentSongIndex === 0) {
-    const currentIndex = playlist.songs.length;
-    const currentSong = playlist.songs[currentIndex];
-    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-    return {...playlist, currentSongIndex: currentIndex}
-  } else {
-    const currentIndex = playlist.currentSongIndex - 1;
-    const currentSong = playlist.songs[currentIndex];
-    console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-    return {...playlist, currentSongIndex: currentIndex}
-  }
+	if (playlist.currentSongIndex === 0) {
+    	const currentIndex = playlist.songs.length;
+    	const currentSong = playlist.songs[currentIndex];
+    	console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    	return {...playlist, currentSongIndex: currentIndex}
+  	} else {
+    	const currentIndex = playlist.currentSongIndex - 1;
+    	const currentSong = playlist.songs[currentIndex];
+    	console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
+    	return {...playlist, currentSongIndex: currentIndex}
+  	}
     
 }
 
+
+
 /**
- * Searches the playlist for songs.
- * @param playlist - The playlist.
+ * Searches the database for songs.
+ * @param database - The songdatabase.
+ * @param searchTerm - The searchterm may be the title or the artist
  * @returns An array of songs matching the search criteria.
  */
-function searchPlaylist(playlist: Playlist, searchTerm: string): Array<Song> {
-  
+function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Array<Song> {
+    const matchingSongs: Song[] = [];
+    const lowercaseSearchTerm = searchTerm.toLowerCase();
+
+    for (const songId in songDatabase.songs) {
+        const song = songDatabase.songs[songId];
+        const lowercaseTitle = song.title.toLowerCase();
+        const lowercaseArtist = song.artist.toLowerCase();
+
+        if (
+            lowercaseTitle.includes(lowercaseSearchTerm) ||
+            lowercaseArtist.includes(lowercaseSearchTerm) ||  // Fix this line
+            song.collaborators.some(collaborator =>
+                collaborator.toLowerCase().includes(lowercaseSearchTerm)
+            )
+        ) {
+            matchingSongs.push(song);
+        }
+    }
+
+    return matchingSongs;
 }
 
-function driver_loop(): void {
-   const input = user
-}
 
-console.log('1. Välj spellista')
-console.log('2. Skapa ny spellista')
-
-
-console.log('1. Lägg till låt')
-console.log('2. Ta bort låt')
-console.log('3. Spela låt')
-console.log('4. Spela nästa låt')
-console.log('5. Spela föregående låt')
-console.log('6. Köa låt')
+const searchTerm = 'Governor Andy';
+const searchResult = searchSongDatabase(songDatabase, searchTerm);
+console.log(searchResult);
 
 
 // Shuffel och sökning ska vara på plats

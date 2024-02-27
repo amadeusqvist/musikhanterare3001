@@ -1,96 +1,102 @@
 {
   "jazzlista": {
-    "1": {
+    "name": "Jazzlista",
+    "songs": [
+      {
         "title": "Giant Steps",
         "artist": "John Coltrane",
         "album": "Giant Steps",
         "collaborators": []
-    },
-    "2": {
+      },
+      {
         "title": "Naima",
         "artist": "John Coltrane",
         "album": "Giant Steps",
         "collaborators": []
-    },
-    "3": {
+      },
+      {
         "title": "In 'N Out",
         "artist": "Joe Henderson",
         "album": "In 'N Out",
         "collaborators": []
-    },
-    "4": {
+      },
+      {
         "title": "Give it One",
         "artist": "Maynard Ferguson",
         "album": "The Essential Maynard Ferguson",
         "collaborators": []
-    },
-    "5": {
+      },
+      {
         "title": "So What",
         "artist": "Miles Davis",
         "album": "Kind Of Blue",
         "collaborators": ["John Coltrane", "Cannonball Adderley", "Bill Evans"]
-    },
-    "6": {
+      },
+      {
         "title": "Monk's Dream",
         "artist": "Larry Young",
         "album": "Unity",
         "collaborators": []
-    },
-    "7": {
+      },
+      {
         "title": "Das' Dat",
         "artist": "Jackie McLean",
         "album": "It's Time",
         "collaborators": []
-    },
-    "8": {
+      },
+      {
         "title": "You're My Everything",
         "artist": "Freddie Hubbard",
         "album": "Hub-Tones",
         "collaborators": []
-    },
-    "9": {
+      },
+      {
         "title": "Cool Struttin'",
         "artist": "Sonny Clark",
         "album": "Cool Struttin'",
         "collaborators": []
-    }
+      }
+    ]
   },
   "rocklista": {
-    "1": {
-    "title": "The Siren",
-    "artist": "Graveyard",
-    "album": "Hisingen Blues",
-    "collaborators": [] 
-    },
-    "2": {
-      "title": "Nightrider",
-      "artist": "Horisont",
-      "album": "Två Sidor Av Horisonten",
-      "collaborators": []
-    },
-    "3": {
-      "title": "Purple Haze",
-      "artist": "Jimi Hendrix",
-      "album": "Electric Ladyland",
-      "collaborators": [] 
-    },
-    "4": {
-      "title": "Just for Kicks",
-      "artist": "Salem's Pot",
-      "album": "Pronounce This!",
-      "collaborators": []
-    },
-    "5": {
-      "title": "White Room",
-      "artist": "Cream",
-      "album": "Wheels Of Fire",
-      "collaborators": []
-    },
-    "6": {
-      "title": "Boogie",
-      "artist": "UFO",
-      "album": "UFO 1",
-      "collaborators": []
-    }
+    "name": "Rocklista",
+    "songs": [
+      {
+        "title": "The Siren",
+        "artist": "Graveyard",
+        "album": "Hisingen Blues",
+        "collaborators": []
+      },
+      {
+        "title": "Nightrider",
+        "artist": "Horisont",
+        "album": "Två Sidor Av Horisonten",
+        "collaborators": []
+      },
+      {
+        "title": "Purple Haze",
+        "artist": "Jimi Hendrix",
+        "album": "Electric Ladyland",
+        "collaborators": []
+      },
+      {
+        "title": "Just for Kicks",
+        "artist": "Salem's Pot",
+        "album": "Pronounce This!",
+        "collaborators": []
+      },
+      {
+        "title": "White Room",
+        "artist": "Cream",
+        "album": "Wheels Of Fire",
+        "collaborators": []
+      },
+      {
+        "title": "Boogie",
+        "artist": "UFO",
+        "album": "UFO 1",
+        "collaborators": []
+      }
+    ]
   }
 }

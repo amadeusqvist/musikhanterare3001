@@ -5,25 +5,34 @@ import * as PromptSync from "prompt-sync";
 import * as readline from 'readline';
 import * as fs from 'fs';
 
-/**
- * Stores information about a song including title, artist, and album if any.
- */
 type Song = {
-    title: string;
-    artist: string;
-    album: string;
-    collaborators: List<string>
-  };
+	title: string;
+	artist: string;
+	album: string;
+	collaborators: string[]; // Assuming collaborators is an array of strings
+};
+  
+type Playlist = {
+	name: string;
+	songs: Song[];
+};
 
-/**
- * Stores songs, history for navigating backward and forward, the queue for
- * queuing songs, and the index of the currently playing song.
- */
-type Playlist =  { 
-    name: string;
-    songs: Array<Song>;
-    currentSongIndex: number; 
-  }
+type PlaylistData = {
+	[key: string]: Playlist;
+};
+
+// Load playlists from JSON file
+function loadPlaylists(): PlaylistData {
+	try {
+		const data = fs.readFileSync('playlists.json', 'utf8');
+		return JSON.parse(data) as PlaylistData;
+	} catch (error) {
+		console.error('Error loading playlists:', error);
+		return {};
+	}
+}
+
+const playlists: PlaylistData = loadPlaylists();
 
 const rl: readline.Interface = readline.createInterface({
     input: process.stdin,
@@ -35,7 +44,7 @@ function mainMenu(): void {
     console.log("[2] Make Playlist");
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
-            choosePlaylistMenu();
+            choosePlaylistMenu(playlists);
         } else if (answer === '2') {
             makePlaylistMenu();
         } else {
@@ -45,45 +54,7 @@ function mainMenu(): void {
     });
 }
 
-interface PlaylistData {
-    [key: string]: {
-        [key: string]: Song;
-    };
-}
-
-// Läs in spellistor från JSON-fil
-function loadPlaylists(): PlaylistData {
-    try {
-        const data = fs.readFileSync('playlists.json', 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Error loading playlists:', error);
-        return {};
-    }
-}
-
-// Skriv ut spellistor och deras index
-function printPlaylists(playlists: PlaylistData): void {
-    console.log("Choose a playlist:");
-    let index = 1;
-    for (const playlistName in playlists) {
-        console.log(`[${index}] ${playlistName}`);
-        index++;
-    }
-}
-
-// Skriv ut låtarna i en spellista med deras index
-function printSongs(playlistName: string, playlist: { [key: string]: Song }): void {
-    console.log(`Songs in ${playlistName}:`);
-    for (const songIndex in playlist) {
-        const song = playlist[songIndex];
-        console.log(`[${songIndex}] ${song.title} - ${song.artist}`);
-    }
-}
-
-// Funktion för att välja en spellista och skriva ut dess låtar
-function choosePlaylistMenu(): void {
-    const playlists: PlaylistData = loadPlaylists();
+function choosePlaylistMenu(playlists: PlaylistData): void {
     printPlaylists(playlists);
 
     rl.question("Enter the index of the playlist you want to choose: ", (answer: string): void => {
@@ -92,10 +63,77 @@ function choosePlaylistMenu(): void {
             const playlistNames = Object.keys(playlists);
             const selectedPlaylistName = playlistNames[index - 1];
             const selectedPlaylist = playlists[selectedPlaylistName];
-            printSongs(selectedPlaylistName, selectedPlaylist);
+            printSongs(selectedPlaylistName, selectedPlaylist.songs);
+            playlistMenu(selectedPlaylistName, selectedPlaylist.songs); // Pass playlist name and songs as arguments
         } else {
             console.log("Invalid playlist index. Please try again.");
-            choosePlaylistMenu();
+            choosePlaylistMenu(playlists);
+        }
+    });
+}
+
+function printSongs(playlistName: string, songs: Song[]): void {
+	console.log(`Songs in playlist "${playlistName}":`);
+    for (let i = 0; i < songs.length; i++) {
+        console.log(`${songs[i].title} - ${songs[i].artist}`);
+    }
+}
+
+function printSongsIndex(playlistName: string, songs: Song[]): void {
+    console.log(`Songs in playlist "${playlistName}":`);
+    for (let i = 0; i < songs.length; i++) {
+        console.log(`[${i + 1}] ${songs[i].title} - ${songs[i].artist}`);
+    }
+}
+
+function printPlaylists(playlists: PlaylistData): void {
+    console.log("Available playlists:");
+    Object.keys(playlists).forEach((playlistName, index) => {
+        console.log(`[${index + 1}] ${playlistName}`);
+    });
+}
+
+function playlistMenu(selectedPlaylistName: string, songs: Song[]): void {
+    console.log("[1] Play");
+    console.log("[2] Play specific song");
+    rl.question("Enter your choice: ", (answer: string): void => {
+        if (answer === '1') {
+            playPlaylist(selectedPlaylistName, songs);
+        } else if (answer === '2') {
+            playSpecificSong(selectedPlaylistName, songs);
+        } else {
+            console.log("Invalid choice. Please enter 1 or 2.");
+            playlistMenu(selectedPlaylistName, songs); // Prompt again if choice is invalid
+        }
+    });
+}
+
+function playPlaylist(selectedPlaylistName: string, songs: Song[]): void {
+    console.log(`Now playing playlist: ${selectedPlaylistName}`);
+    if (songs.length === 0) {
+        console.log("Playlist is empty.");
+    } else {
+        const currentSong = songs[0];
+        console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+    }
+	playlistMenu(selectedPlaylistName, songs);
+}
+
+function playSpecificSong(selectedPlaylistName: string, songs: Song[]): void {
+    console.log(`Playlist: ${selectedPlaylistName}`);
+    for (let i = 0; i < songs.length; i++) {
+        console.log(`[${i + 1}]. ${songs[i].title} - ${songs[i].artist}`);
+    }
+
+    rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
+        const songNumber = parseInt(answer);
+        if (!isNaN(songNumber) && songNumber > 0 && songNumber <= songs.length) {
+            const currentSong = songs[songNumber - 1];
+            console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+			playlistMenu(selectedPlaylistName, songs);
+        } else {
+            console.log("Invalid song number. Please try again.");
+            playSpecificSong(selectedPlaylistName, songs); // Prompt again if input is invalid
         }
     });
 }

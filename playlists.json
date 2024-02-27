@@ -1,0 +1,102 @@
+{
+  "jazzlista": {
+    "name": "Jazzlista",
+    "songs": [
+      {
+        "title": "Giant Steps",
+        "artist": "John Coltrane",
+        "album": "Giant Steps",
+        "collaborators": []
+      },
+      {
+        "title": "Naima",
+        "artist": "John Coltrane",
+        "album": "Giant Steps",
+        "collaborators": []
+      },
+      {
+        "title": "In 'N Out",
+        "artist": "Joe Henderson",
+        "album": "In 'N Out",
+        "collaborators": []
+      },
+      {
+        "title": "Give it One",
+        "artist": "Maynard Ferguson",
+        "album": "The Essential Maynard Ferguson",
+        "collaborators": []
+      },
+      {
+        "title": "So What",
+        "artist": "Miles Davis",
+        "album": "Kind Of Blue",
+        "collaborators": ["John Coltrane", "Cannonball Adderley", "Bill Evans"]
+      },
+      {
+        "title": "Monk's Dream",
+        "artist": "Larry Young",
+        "album": "Unity",
+        "collaborators": []
+      },
+      {
+        "title": "Das' Dat",
+        "artist": "Jackie McLean",
+        "album": "It's Time",
+        "collaborators": []
+      },
+      {
+        "title": "You're My Everything",
+        "artist": "Freddie Hubbard",
+        "album": "Hub-Tones",
+        "collaborators": []
+      },
+      {
+        "title": "Cool Struttin'",
+        "artist": "Sonny Clark",
+        "album": "Cool Struttin'",
+        "collaborators": []
+      }
+    ]
+  },
+  "rocklista": {
+    "name": "Rocklista",
+    "songs": [
+      {
+        "title": "The Siren",
+        "artist": "Graveyard",
+        "album": "Hisingen Blues",
+        "collaborators": []
+      },
+      {
+        "title": "Nightrider",
+        "artist": "Horisont",
+        "album": "Två Sidor Av Horisonten",
+        "collaborators": []
+      },
+      {
+        "title": "Purple Haze",
+        "artist": "Jimi Hendrix",
+        "album": "Electric Ladyland",
+        "collaborators": []
+      },
+      {
+        "title": "Just for Kicks",
+        "artist": "Salem's Pot",
+        "album": "Pronounce This!",
+        "collaborators": []
+      },
+      {
+        "title": "White Room",
+        "artist": "Cream",
+        "album": "Wheels Of Fire",
+        "collaborators": []
+      },
+      {
+        "title": "Boogie",
+        "artist": "UFO",
+        "album": "UFO 1",
+        "collaborators": []
+      }
+    ]
+  }
+}

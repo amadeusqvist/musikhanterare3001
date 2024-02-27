@@ -29,7 +29,9 @@ interface SongDatabase {
     songs: Record<string, Song>;
 };
 
+
 type SongQueue = Queue<Song>;
+
 
 /**
  * Creates a fresh playlist.
@@ -89,10 +91,12 @@ function playPlaylist(playlist: Playlist): Playlist {
 }
 
 function playSpecificSong(playlist: Playlist, songIndex: number): Playlist {
+
     console.log('${playlist.name}')
     for (let i = 0; i < playlist.songs.length; i = i + 1) {
         console.log('[${i}]. ${playlist.songs[i].title} - ${playlist.songs[i].artist}');
     }
+
   
     const userInput = prompt('Enter the number of the song you wish to play: ');
     const songNumber = parseInt(userInput);

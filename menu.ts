@@ -11,7 +11,21 @@ type Song = {
 	album: string;
 	collaborators: Array<string>; 
 };
-  
+
+type SongDatabase = {
+    songs: Array<Song>;
+};
+
+function loadSongs(): SongDatabase {
+    try {
+        const data = fs.readFileSync('songs.json', 'utf8');
+        return JSON.parse(data) as SongDatabase;
+    } catch (error) {
+        console.error('Error loading songs:', error);
+        return { songs: [] };
+    }
+}
+
 type Playlist = {
 	name: string;
 	songs: Array<Song>;
@@ -210,6 +224,62 @@ function playPreviousSong(selectedPlaylist: Playlist): void {
         selectedPlaylist.currentSongIndex = currentIndex;
     }
 	playlistMenu(selectedPlaylist);
+}
+
+/**
+Searches the database for songs.
+@param database - The songdatabase.
+@param searchTerm - The searchterm may be the title or the artist
+@returns An array of songs matching the search criteria.
+*/
+function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Array<Song> {
+    const matchingSongs: Song[] = [];
+    const lowercaseSearchTerm = searchTerm.toLowerCase();
+
+    for (const songId in songDatabase.songs) {
+        const song = songDatabase.songs[songId];
+        const lowercaseTitle = song.title.toLowerCase();
+        const lowercaseArtist = song.artist.toLowerCase();
+
+        if (
+            lowercaseTitle.includes(lowercaseSearchTerm, undefined) ||
+            lowercaseArtist.includes(lowercaseSearchTerm) ||
+            song.collaborators.some(collaborator =>
+                collaborator.toLowerCase().includes(lowercaseSearchTerm)
+            )
+        ) {
+            matchingSongs.push(song);
+        }
+    }
+
+    return matchingSongs;
+}
+
+function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
+    rl.question("Search after a song: ", (answer: string): void => {
+    const searchTerm = answer;
+    const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
+
+    if (matchingSongs.length === 0) {
+        console.log("There were no matching songs.")
+    } else {
+        console.log("Matching songs:");
+        for (let i = 0; i < matchingSongs.length; i++) {
+            console.log(`${[i+1]} ${matchingSongs[i].title} - ${matchingSongs[i].artist}`);
+        }
+
+        rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
+            const songNumber = parseInt(answer);
+            if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
+                const selectedSong = matchingSongs[songNumber - 1]
+                selectedPlaylist.songs.push(selectedSong);
+            } else {
+                // if invalid input print options again
+
+            }
+        });
+    }
+    });
 }
 
 function removeSong(selectedPlaylist: Playlist): void {

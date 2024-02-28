@@ -1,292 +1,292 @@
 {
-    "songs": {
-        "1": {
+    "songs": [
+        {
             "title": "Strövtåg i hembygden",
             "artist": "Mando Diao",
             "album": "Infruset",
             "collaborators": []
         },
-        "2": {
+        {
             "title": "Säg mig var du står",
             "artist": "Carola",
             "album": "Främling 25 år",
             "collaborators": []
         },
-        "3": {
+        {
             "title": "Call Your Girlfriend",
             "artist": "Robyn",
             "album": "Body Talk",
             "collaborators": []
         },
-        "4": {
+        {
             "title": "Reggaeprofil",
             "artist": "Governor Andy",
             "album": "Som Salomos Song",
             "collaborators": ["Jr Erik"]
         },
-        "5": {
+        {
             "title": "Backa med släp",
             "artist": "Academics",
             "album": "Nånstans i skogen",
             "collaborators": ["Erk"]
         },
-        "6": {
+        {
             "title": "Song Title 6",
             "artist": "Artist 6",
             "album": "Album 6",
             "collaborators": ["Collaborator 6A", "Collaborator 6B"]
         },
-        "7": {
+        {
             "title": "Song Title 7",
             "artist": "Artist 7",
             "album": "Album 7",
             "collaborators": ["Collaborator 7A", "Collaborator 7B"]
         },
-        "8": {
+        {
             "title": "Song Title 8",
             "artist": "Artist 8",
             "album": "Album 8",
             "collaborators": ["Collaborator 8A", "Collaborator 8B"]
         },
-        "9": {
+        {
             "title": "Song Title 9",
             "artist": "Artist 9",
             "album": "Album 9",
             "collaborators": ["Collaborator 9A", "Collaborator 9B"]
         },
-        "10": {
+        {
             "title": "Song Title 10",
             "artist": "Artist 10",
             "album": "Album 10",
             "collaborators": ["Collaborator 10A", "Collaborator 10B"]
         },
-        "11": {
+        {
             "title": "Leevi & the Leavings",
             "artist": "Vasas flora och fauna",
             "album": "Släkt med Lotta Svärd",
             "collaborators": []
         },
-        "12": {
+        {
             "title": "Det ordnar sig",
             "artist": "Danne Stråhed",
             "album": "13 rätt... 13 nya låtar",
             "collaborators": []
         },
-        "13": {
+        {
             "title": "På väg",
             "artist": "Turid",
             "album": "Tistlar från tundran",
             "collaborators": []
         },
-        "14": {
+        {
             "title": "Di tror int när jag säger",
             "artist": "Vasas flora och fauna",
             "album": "Släkt med Lotta Svärd",
             "collaborators": []
         },
-        "15": {
+        {
             "title": "Fönsterkuvert",
             "artist": "Danne Stråhed",
             "album": "Solsång",
             "collaborators": []
         },
-        "16": {
+        {
             "title": "Somliga går med trasiga skor",
             "artist": "Cornelis Vreeswijk",
             "album": "Tio vackra visor och personliga Person",
             "collaborators": []
         },
-        "17": {
+        {
             "title": "Thunderstruck",
             "artist": "AC/DC",
             "album": "The Razors Edge",
             "collaborators": []
         },
-        "18": {
+        {
             "title": "Dreams",
             "artist": "Fleetwood Mac",
             "album": "Rumours",
             "collaborators": []
         },
-        "19": {
+        {
             "title": "Paint It Black",
             "artist": "The Rolling Stones",
             "album": "Aftermath",
             "collaborators": []
         },
-        "20": {
+        {
             "title": "Don't Stop Believin'",
             "artist": "Journey",
             "album": "Escape",
             "collaborators": []
         },
-        "21": {
+        {
             "title": "Hotel California",
             "artist": "Eagles",
             "album": "Hotel California",
             "collaborators": []
         },
-        "22": {
+        {
             "title": "Dream On",
             "artist": "Aerosmith",
             "album": "Aerosmith",
             "collaborators": []
         },
-        "23": {
+        {
             "title": "Runaway",
             "artist": "Bon Jovi",
             "album": "Bon Jovi",
             "collaborators": []
         },
-        "24": {
+        {
             "title": "I Love Rock 'N Roll",
             "artist": "Joan Jett & the Blackhearts",
             "album": "I Love Rock 'N Roll",
             "collaborators": []
         },
-        "25": {
+        {
             "title": "Stairway to Heaven",
             "artist": "Led Zeppelin",
             "album": "Led Zeppelin IV",
             "collaborators": []
         },
-        "26": {
+        {
             "title": "Seven Nation Army",
             "artist": "The White Stripes",
             "album": "Elephant",
             "collaborators": []
         },
-        "27": {
+        {
             "title": "Californication",
             "artist": "Red Hot Chili Peppers",
             "album": "Californication",
             "collaborators": []
         },
-        "28": {
+        {
             "title": "Come As You Are",
             "artist": "Nirvana",
             "album": "Nevermind",
             "collaborators": []
         },
-        "29": {
+        {
             "title": "Creep",
             "artist": "Radiohead",
             "album": "Pablo Honey",
             "collaborators": []
         },
-        "30": {
+        {
             "title": "Giant Steps",
             "artist": "John Coltrane",
             "album": "Giant Steps",
             "collaborators": []
         },
-        "31": {
+        {
             "title": "Naima",
             "artist": "John Coltrane",
             "album": "Giant Steps",
             "collaborators": []
         },
-        "32": {
+        {
             "title": "In 'N Out",
             "artist": "Joe Henderson",
             "album": "In 'N Out",
             "collaborators": []
         },
-        "33": {
+        {
             "title": "Give it One",
             "artist": "Maynard Ferguson",
             "album": "The Essential Maynard Ferguson",
             "collaborators": []
         },
-        "34": {
+        {
             "title": "So What",
             "artist": "Miles Davis",
             "album": "Kind Of Blue",
             "collaborators": ["John Coltrane", "Cannonball Adderley", "Bill Evans"]
         },
-        "35": {
+        {
             "title": "Monk's Dream",
             "artist": "Larry Young",
             "album": "Unity",
             "collaborators": []
         },
-        "36": {
+        {
             "title": "Das' Dat",
             "artist": "Jackie McLean",
             "album": "It's Time",
             "collaborators": []
         },
-        "37": {
+        {
             "title": "You're My Everything",
             "artist": "Freddie Hubbard",
             "album": "Hub-Tones",
             "collaborators": []
         },
-        "38": {
+        {
             "title": "Cool Struttin'",
             "artist": "Sonny Clark",
             "album": "Cool Struttin'",
             "collaborators": []
         },
-        "39": {
+        {
             "title": "Take on Me",
             "artist": "a-ha",
             "album": "Hunting High and Low",
             "collaborators": []
         },
-        "40": {
+        {
             "title": "Dancing Queen",
             "artist": "ABBA",
             "album": "Arrival",
             "collaborators": []
         },
-        "41": {
+        {
             "title": "Don't Go Breaking My Heart",
             "artist": "Elton John",
             "album": "To Be Continued...",
             "collaborators": ["Kiki Dee"]
         },
-        "42": {
+        {
             "title": "You Can Call Me Al",
             "artist": "Paul Simon",
             "album": "Graceland",
             "collaborators": []
         },
-        "43": {
+        {
             "title": "September",
             "artist": "Earth, Wind & Fire",
             "album": "The Best Of Earth, Wind & Fire Vol. 1",
             "collaborators": []
         },
-        "44": {
+        {
             "title": "Africa",
             "artist": "TOTO",
             "album": "Toto IV",
             "collaborators": []
         },
-        "45": {
+        {
             "title": "Uptown Girl",
             "artist": "Billy Joel",
             "album": "An Innocent Man",
             "collaborators": []
         },
-        "46": {
+        {
             "title": "Piano Man",
             "artist": "Billy Joel",
             "album": "Piano Man",
             "collaborators": []
         },
-        "47": {
+        {
             "title": "Jump",
             "artist": "Van Halen",
             "album": "1984",
             "collaborators": []
         },
-        "48": {
+        {
             "title": "Tainted Love",
             "artist": "Soft Cell",
             "album": "Non-Stop Erotic Cabaret",
             "collaborators": []
         }
-  }
+    ]
 }

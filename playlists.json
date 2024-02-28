@@ -56,7 +56,8 @@
         "album": "Cool Struttin'",
         "collaborators": []
       }
-    ]
+    ],
+    "currentSongIndex": -1
   },
   "rocklista": {
     "name": "Rocklista",
@@ -97,6 +98,12 @@
         "album": "UFO 1",
         "collaborators": []
       }
-    ]
+    ],
+    "currentSongIndex": -1
+  },
+  "songQueue": {
+    "name": "Song Queue",
+    "songs": [],
+    "currentSongIndex": -1
   }
 }

@@ -29,7 +29,6 @@ interface SongDatabase {
     songs: Record<string, Song>;
 };
 
-
 type SongQueue = Queue<Song>;
 
 

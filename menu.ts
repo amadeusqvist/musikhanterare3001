@@ -165,7 +165,7 @@ function playlistMenu(selectedPlaylist: Playlist): void {
 
 function viewQueue(selectedPlaylist: Playlist, songQueue: Playlist): void {
     if (songQueue.songs.length > 0) {
-        printSongsIndex(songQueue);
+        printSongsIndex(songQueue.songs);
     } else {
         console.log("There are no queued songs.")
     }
@@ -198,7 +198,7 @@ function playPlaylist(selectedPlaylist: Playlist): void {
  */
 function playSpecificSong(selectedPlaylist: Playlist): void {
     console.log(`Playlist: ${selectedPlaylist.name}`);
-    printSongsIndex(selectedPlaylist);
+    printSongsIndex(selectedPlaylist.songs);
 
     rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
         const songIndex = parseInt(answer);

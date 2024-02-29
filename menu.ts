@@ -49,6 +49,8 @@ function loadPlaylists(): PlaylistData {
 
 const playlists: PlaylistData = loadPlaylists();
 
+const songQueue = playlists["songQueue"];
+
 const rl: readline.Interface = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -121,8 +123,8 @@ function printSongsIndex(songArray: Song[]): void {
  */
 function printPlaylists(playlists: PlaylistData): void {
     console.log("Available playlists:");
-    Object.keys(playlists).forEach((playlistName, index) => {
-        console.log(`[${index + 1}] ${playlistName}`);
+    Object.values(playlists).forEach((playlist, index) => {
+        console.log(`[${index + 1}] ${playlist.name}`);
     });
 }
 
@@ -145,13 +147,15 @@ function playlistMenu(selectedPlaylist: Playlist): void {
         } else if (answer === '2') {
             playSpecificSong(selectedPlaylist);
         } else if (answer === '3') {
-            //playNextSong
+            playNextSong(selectedPlaylist, playlists);
         } else if (answer === '4') {
             playPreviousSong(selectedPlaylist);
-        } else if (answer === '11') {
-            shuffleSong(selectedPlaylist);
         } else if (answer === '8') {
             removeSong(selectedPlaylist);
+        } else if (answer === '10') {
+            viewQueue(selectedPlaylist, songQueue);
+        } else if (answer === '11') {
+            shuffleSong(selectedPlaylist);
         } else {
             console.log("Invalid choice. Please enter 1 or 2.");
             playlistMenu(selectedPlaylist); // Prompt again if choice is invalid
@@ -159,9 +163,18 @@ function playlistMenu(selectedPlaylist: Playlist): void {
     });
 }
 
+function viewQueue(selectedPlaylist: Playlist, songQueue: Playlist): void {
+    if (songQueue.songs.length > 0) {
+        printSongsIndex(songQueue);
+    } else {
+        console.log("There are no queued songs.")
+    }
+    playlistMenu(selectedPlaylist);
+}
+
 /**
  * Plays the first song in the playlist and prompts the user to navigate to the next song or return to the playlist menu.
- * @param selectedPlaylistName - The name of the selected playlist.
+ * @param selectedPlaylist - The name of the selected playlist.
  * @param songs - The array of songs in the playlist.
  * @returns Void.
  */
@@ -185,9 +198,7 @@ function playPlaylist(selectedPlaylist: Playlist): void {
  */
 function playSpecificSong(selectedPlaylist: Playlist): void {
     console.log(`Playlist: ${selectedPlaylist.name}`);
-    for (let i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log(`[${i + 1}]. ${selectedPlaylist.songs[i].title} - ${selectedPlaylist.songs[i].artist}`);
-    }
+    printSongsIndex(selectedPlaylist);
 
     rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
         const songIndex = parseInt(answer);
@@ -201,6 +212,26 @@ function playSpecificSong(selectedPlaylist: Playlist): void {
             playSpecificSong(selectedPlaylist); // Prompt again if input is invalid
         }
     });
+}
+
+function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData): void {
+    if (songQueue.songs.length > 0) {
+        console.log("Playing the next song from the song queue:");
+        const currentSong = songQueue.songs[0];
+        console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+        songQueue.songs.shift(); // Remove the played song from the queue
+    } else {
+        if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
+            selectedPlaylist.currentSongIndex++;
+            const currentSong = selectedPlaylist.songs[selectedPlaylist.currentSongIndex];
+            console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+        } else {
+            selectedPlaylist.currentSongIndex = 0;
+            const currentSong = selectedPlaylist.songs[0];
+            console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+        }
+    }
+    playlistMenu(selectedPlaylist);
 }
 
 /**
@@ -330,37 +361,6 @@ function shuffleSong(selectedPlaylist: Playlist): void {
     }
     playlistMenu(selectedPlaylist);
 }
-
-/**
- * Plays the next song in the playlist.
- * @param playlist - The playlist.
- *
-function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
-    if (is_empty_queue(songQueue)) {
-        const currentIndex = playlist.currentSongIndex;
-        if (playlist.songs[currentIndex] === playlist.songs[-1]) {
-            const currentIndex = 0;
-            const currentSong = playlist.songs[currentIndex];
-
-            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-
-            return {...playlist, currentSongIndex: currentIndex};
-        } else {
-			const currentSong = playlist.songs[currentIndex + 1];
-            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-
-            return {...playlist, currentSongIndex: currentIndex + 1};
-        }
-
-    
-    } else {
-		const currentSong = qhead(songQueue);
-        dequeue(songQueue);
-        console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-        return playlist;
-    }
-}
-*/
 
 function makePlaylistMenu(): void {
     console.log("Make a new playlist");

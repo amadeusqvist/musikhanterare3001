@@ -84,7 +84,8 @@ function choosePlaylistMenu(playlists: PlaylistData): void {
             const playlistNames = Object.keys(playlists);
             const selectedPlaylistKey = playlistNames[index - 1];
             const selectedPlaylist = playlists[selectedPlaylistKey];
-            printSongs(selectedPlaylist);
+            console.log(`Songs in playlist "${selectedPlaylist.name}":`);
+            printSongs(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
 
         } else {
@@ -100,18 +101,16 @@ function choosePlaylistMenu(playlists: PlaylistData): void {
  * @param songs - The array of songs in the playlist.
  * @returns Void.
  */
-function printSongs(selectedPlaylist: Playlist): void {
-	console.log(`Songs in playlist "${selectedPlaylist.name}":`);
-    for (let i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log(`${selectedPlaylist.songs[i].title} - ${selectedPlaylist.songs[i].artist}`);
+function printSongs(songArray: Song[]): void {
+    for (let i = 0; i < songArray.length; i++) {
+        console.log(`${songArray[i].title} - ${songArray[i].artist}`);
     }
 }
 
 //The same as printSongs but also adds an index to each song.
-function printSongsIndex(selectedPlaylist: Playlist): void {
-    console.log(`Songs in playlist "${selectedPlaylist.name}":`);
-    for (let i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log(`[${i + 1}] ${selectedPlaylist.songs[i].title} - ${selectedPlaylist.songs[i].artist}`);
+function printSongsIndex(songArray: Song[]): void {
+    for (let i = 0; i < songArray.length; i++) {
+        console.log(`[${i + 1}] ${songArray[i].title} - ${songArray[i].artist}`);
     }
 }
 
@@ -255,30 +254,48 @@ function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Arr
     return matchingSongs;
 }
 
-function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
-    rl.question("Search after a song: ", (answer: string): void => {
-    const searchTerm = answer;
-    const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
+function findMatchingSongs(songDatabase: SongDatabase, callback: (matchingSongs: Song[]) => void): void {
+    const askQuestion = () => {
+        rl.question("Search after a song: ", (answer: string): void => {
+            const searchTerm = answer;
+            const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
 
-    if (matchingSongs.length === 0) {
-        console.log("There were no matching songs.")
-    } else {
-        console.log("Matching songs:");
-        for (let i = 0; i < matchingSongs.length; i++) {
-            console.log(`${[i+1]} ${matchingSongs[i].title} - ${matchingSongs[i].artist}`);
-        }
-
-        rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
-            const songNumber = parseInt(answer);
-            if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
-                const selectedSong = matchingSongs[songNumber - 1]
-                selectedPlaylist.songs.push(selectedSong);
+            if (matchingSongs.length === 0) {
+                console.log("There were no matching songs. Please try again.");
+                // Recursively call the function to allow the user to try again
+                askQuestion();
             } else {
-                // if invalid input print options again
-
+                // Callback with matchingSongs array
+                callback(matchingSongs);
             }
         });
-    }
+    };
+    askQuestion();
+}
+
+
+function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
+    
+    // initiate empty array of matching songs
+    const matchingSongs: Song[] = [];
+    
+    // add all matching songs into the matchingSongs array
+    findMatchingSongs(songDatabase, (selectedSongs: Song[]) => {
+        matchingSongs.push(...selectedSongs);
+    });
+
+    // print all the songs Index
+    console.log("Matching songs:");
+    printSongsIndex(matchingSongs);
+
+    rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
+        const songNumber = parseInt(answer);
+        if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
+            const selectedSong = matchingSongs[songNumber - 1]
+            selectedPlaylist.songs.push(selectedSong);
+        } else {
+            // if invalid input print options again
+        }
     });
 }
 
@@ -286,7 +303,8 @@ function removeSong(selectedPlaylist: Playlist): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
-        printSongs(selectedPlaylist);
+        console.log(`Songs in playlist "${selectedPlaylist.name}":`);
+        printSongs(selectedPlaylist.songs);
         rl.question("Enter the index of the song you want to remove: ", (answer: string): void => {
             const songIndex = parseInt(answer);
             if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {

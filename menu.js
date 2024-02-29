@@ -2,6 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var readline = require("readline");
 var fs = require("fs");
+function loadSongs() {
+    try {
+        var data = fs.readFileSync('songs.json', 'utf8');
+        return JSON.parse(data);
+    }
+    catch (error) {
+        console.error('Error loading songs:', error);
+        return { songs: [] };
+    }
+}
 // Load playlists from JSON file
 function loadPlaylists() {
     try {
@@ -14,6 +24,7 @@ function loadPlaylists() {
     }
 }
 var playlists = loadPlaylists();
+var songQueue = playlists["songQueue"];
 var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -83,8 +94,8 @@ function printSongsIndex(selectedPlaylist) {
  */
 function printPlaylists(playlists) {
     console.log("Available playlists:");
-    Object.keys(playlists).forEach(function (playlistName, index) {
-        console.log("[".concat(index + 1, "] ").concat(playlistName));
+    Object.values(playlists).forEach(function (playlist, index) {
+        console.log("[".concat(index + 1, "] ").concat(playlist.name));
     });
 }
 function playlistMenu(selectedPlaylist) {
@@ -107,16 +118,19 @@ function playlistMenu(selectedPlaylist) {
             playSpecificSong(selectedPlaylist);
         }
         else if (answer === '3') {
-            //playNextSong
+            playNextSong(selectedPlaylist, playlists);
         }
         else if (answer === '4') {
             playPreviousSong(selectedPlaylist);
         }
-        else if (answer === '11') {
-            shuffleSong(selectedPlaylist);
-        }
         else if (answer === '8') {
             removeSong(selectedPlaylist);
+        }
+        else if (answer === '10') {
+            viewQueue(selectedPlaylist, songQueue);
+        }
+        else if (answer === '11') {
+            shuffleSong(selectedPlaylist);
         }
         else {
             console.log("Invalid choice. Please enter 1 or 2.");
@@ -124,9 +138,18 @@ function playlistMenu(selectedPlaylist) {
         }
     });
 }
+function viewQueue(selectedPlaylist, songQueue) {
+    if (songQueue.songs.length > 0) {
+        printSongsIndex(songQueue);
+    }
+    else {
+        console.log("There are no queued songs.");
+    }
+    playlistMenu(selectedPlaylist);
+}
 /**
  * Plays the first song in the playlist and prompts the user to navigate to the next song or return to the playlist menu.
- * @param selectedPlaylistName - The name of the selected playlist.
+ * @param selectedPlaylist - The name of the selected playlist.
  * @param songs - The array of songs in the playlist.
  * @returns Void.
  */
@@ -150,9 +173,7 @@ function playPlaylist(selectedPlaylist) {
  */
 function playSpecificSong(selectedPlaylist) {
     console.log("Playlist: ".concat(selectedPlaylist.name));
-    for (var i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log("[".concat(i + 1, "]. ").concat(selectedPlaylist.songs[i].title, " - ").concat(selectedPlaylist.songs[i].artist));
-    }
+    printSongsIndex(selectedPlaylist);
     rl.question("Enter the number of the song you wish to play: ", function (answer) {
         var songIndex = parseInt(answer);
         if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
@@ -166,6 +187,27 @@ function playSpecificSong(selectedPlaylist) {
             playSpecificSong(selectedPlaylist); // Prompt again if input is invalid
         }
     });
+}
+function playNextSong(selectedPlaylist, playlists) {
+    if (songQueue.songs.length > 0) {
+        console.log("Playing the next song from the song queue:");
+        var currentSong = songQueue.songs[0];
+        console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
+        songQueue.songs.shift(); // Remove the played song from the queue
+    }
+    else {
+        if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
+            selectedPlaylist.currentSongIndex++;
+            var currentSong = selectedPlaylist.songs[selectedPlaylist.currentSongIndex];
+            console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
+        }
+        else {
+            selectedPlaylist.currentSongIndex = 0;
+            var currentSong = selectedPlaylist.songs[0];
+            console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
+        }
+    }
+    playlistMenu(selectedPlaylist);
 }
 /**
  * Plays the previous song in the playlist.
@@ -189,6 +231,54 @@ function playPreviousSong(selectedPlaylist) {
         selectedPlaylist.currentSongIndex = currentIndex;
     }
     playlistMenu(selectedPlaylist);
+}
+/**
+Searches the database for songs.
+@param database - The songdatabase.
+@param searchTerm - The searchterm may be the title or the artist
+@returns An array of songs matching the search criteria.
+*/
+function searchSongDatabase(songDatabase, searchTerm) {
+    var matchingSongs = [];
+    var lowercaseSearchTerm = searchTerm.toLowerCase();
+    for (var songId in songDatabase.songs) {
+        var song = songDatabase.songs[songId];
+        var lowercaseTitle = song.title.toLowerCase();
+        var lowercaseArtist = song.artist.toLowerCase();
+        if (lowercaseTitle.includes(lowercaseSearchTerm, undefined) ||
+            lowercaseArtist.includes(lowercaseSearchTerm) ||
+            song.collaborators.some(function (collaborator) {
+                return collaborator.toLowerCase().includes(lowercaseSearchTerm);
+            })) {
+            matchingSongs.push(song);
+        }
+    }
+    return matchingSongs;
+}
+function addSong(selectedPlaylist, songDatabase) {
+    rl.question("Search after a song: ", function (answer) {
+        var searchTerm = answer;
+        var matchingSongs = searchSongDatabase(songDatabase, searchTerm);
+        if (matchingSongs.length === 0) {
+            console.log("There were no matching songs.");
+        }
+        else {
+            console.log("Matching songs:");
+            for (var i = 0; i < matchingSongs.length; i++) {
+                console.log("".concat([i + 1], " ").concat(matchingSongs[i].title, " - ").concat(matchingSongs[i].artist));
+            }
+            rl.question("Enter the number of the song you wish to play: ", function (answer) {
+                var songNumber = parseInt(answer);
+                if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
+                    var selectedSong = matchingSongs[songNumber - 1];
+                    selectedPlaylist.songs.push(selectedSong);
+                }
+                else {
+                    // if invalid input print options again
+                }
+            });
+        }
+    });
 }
 function removeSong(selectedPlaylist) {
     if (selectedPlaylist.songs.length === 0) {
@@ -220,36 +310,6 @@ function shuffleSong(selectedPlaylist) {
     }
     playlistMenu(selectedPlaylist);
 }
-/**
- * Plays the next song in the playlist.
- * @param playlist - The playlist.
- *
-function playNextSong(playlist: Playlist, songQueue: SongQueue): Playlist {
-    if (is_empty_queue(songQueue)) {
-        const currentIndex = playlist.currentSongIndex;
-        if (playlist.songs[currentIndex] === playlist.songs[-1]) {
-            const currentIndex = 0;
-            const currentSong = playlist.songs[currentIndex];
-
-            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-
-            return {...playlist, currentSongIndex: currentIndex};
-        } else {
-            const currentSong = playlist.songs[currentIndex + 1];
-            console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-
-            return {...playlist, currentSongIndex: currentIndex + 1};
-        }
-
-    
-    } else {
-        const currentSong = qhead(songQueue);
-        dequeue(songQueue);
-        console.log('Now playing: ${currentSong.title} - ${currentSong.artist}');
-        return playlist;
-    }
-}
-*/
 function makePlaylistMenu() {
     console.log("Make a new playlist");
     rl.question("Give the playlist a name: ", function (name) {

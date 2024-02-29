@@ -325,7 +325,7 @@ function shuffleSong(selectedPlaylist: Playlist): void {
     } else {
         const songs = selectedPlaylist.songs;
         const random_index = Math.floor(Math.random() * songs.length);
-        const currentSong = songs.splice(random_index, 1)[0];
+        const currentSong = selectedPlaylist.songs[random_index];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
     }
     playlistMenu(selectedPlaylist);

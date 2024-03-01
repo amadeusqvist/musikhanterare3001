@@ -99,7 +99,7 @@ function printPlaylists(playlists) {
     });
 }
 function playlistMenu(selectedPlaylist) {
-    console.log("[1] Play");
+    console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");
     console.log("[4] Play previous song");
@@ -125,13 +125,13 @@ function playlistMenu(selectedPlaylist) {
             playPreviousSong(selectedPlaylist);
         }
         else if (answer === '7') {
-            addSong(selectedPlaylist, songData);
+            addSong(selectedPlaylist, songData, selectedPlaylist);
         }
         else if (answer === '8') {
             removeSong(selectedPlaylist);
         }
         else if (answer === '9') {
-            addSong(songQueue, songData);
+            addSong(songQueue, songData, selectedPlaylist);
         }
         else if (answer === '10') {
             viewQueue(selectedPlaylist, songQueue);
@@ -235,8 +235,8 @@ function playPreviousSong(selectedPlaylist) {
         selectedPlaylist.currentSongIndex = currentIndex;
     }
     else {
-        var currentIndex = selectedPlaylist.currentSongIndex;
-        var previousSong = selectedPlaylist.songs[currentIndex - 1];
+        var currentIndex = selectedPlaylist.currentSongIndex - 1;
+        var previousSong = selectedPlaylist.songs[currentIndex];
         console.log("Now playing: ".concat(previousSong.title, " - ").concat(previousSong.artist));
         selectedPlaylist.currentSongIndex = currentIndex;
     }
@@ -283,7 +283,7 @@ function findMatchingSongs(songDatabase, callback) {
     };
     askQuestion();
 }
-function addSong(selectedPlaylist, songDatabase) {
+function addSong(selectedPlaylist, songDatabase, returnPlaylist) {
     // initiate empty array of matching songs
     var matchingSongs = [];
     // add all matching songs into the matchingSongs array
@@ -298,7 +298,7 @@ function addSong(selectedPlaylist, songDatabase) {
                     var selectedSong = matchingSongs[songNumber - 1];
                     selectedPlaylist.songs.push(selectedSong);
                     console.log("Added song: ".concat(selectedSong.title, " - ").concat(selectedSong.artist, " to ").concat(selectedPlaylist.name));
-                    playlistMenu(selectedPlaylist);
+                    playlistMenu(returnPlaylist);
                 }
                 else {
                     console.log("Invalid choice.");

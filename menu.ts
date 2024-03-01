@@ -131,18 +131,16 @@ function printPlaylists(playlists: PlaylistData): void {
 }
 
 function playlistMenu(selectedPlaylist: Playlist): void {
-    console.log("[1] Play");
+    console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");
     console.log("[4] Play previous song");
-    console.log("[5] Sort by song (A-Z)");
-    console.log("[6] Sort by artist (A-Z)");
-    console.log("[7] Add song to playlist");
-    console.log("[8] Remove song from playlist");
-    console.log("[9] Queue song");
-    console.log("[10] View queued songs");
-    console.log("[11] Shuffle");
-    console.log("[12] Change playlist")
+    console.log("[5] Add song to playlist");
+    console.log("[6] Remove song from playlist");
+    console.log("[7] Queue song");
+    console.log("[8] View queued songs");
+    console.log("[9] Shuffle");
+    console.log("[10] Change playlist")
 
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
@@ -153,20 +151,20 @@ function playlistMenu(selectedPlaylist: Playlist): void {
             playNextSong(selectedPlaylist, playlists);
         } else if (answer === '4') {
             playPreviousSong(selectedPlaylist);
-        } else if (answer === '7') {
-            addSong(selectedPlaylist, songData);
-        } else if (answer === '8') {
+        } else if (answer === '5') {
+            addSong(selectedPlaylist, songData, selectedPlaylist);
+        } else if (answer === '6') {
             removeSong(selectedPlaylist);
-        } else if (answer === '9') {
-            addSong(songQueue, songData);
-        } else if (answer === '10') {
+        } else if (answer === '7') {
+            addSong(songQueue, songData, selectedPlaylist);
+        } else if (answer === '8') {
             viewQueue(selectedPlaylist, songQueue);
-        } else if (answer === '11') {
+        } else if (answer === '9') {
             shuffleSong(selectedPlaylist);
-        } else if (answer === '12') {
+        } else if (answer === '10') {
             mainMenu();
         } else {
-            console.log("Invalid choice. Please enter 1 or 2.");
+            console.log("Invalid choice. Please enter valid number (1-10).");
             playlistMenu(selectedPlaylist); // Prompt again if choice is invalid
         }
     });
@@ -257,8 +255,8 @@ function playPreviousSong(selectedPlaylist: Playlist): void {
         console.log(`Now playing ${currentSong.title} - ${currentSong.artist}`);
         selectedPlaylist.currentSongIndex = currentIndex;
     } else {
-        const currentIndex = selectedPlaylist.currentSongIndex;
-        const previousSong = selectedPlaylist.songs[currentIndex - 1];
+        const currentIndex = selectedPlaylist.currentSongIndex - 1;
+        const previousSong = selectedPlaylist.songs[currentIndex];
         console.log(`Now playing: ${previousSong.title} - ${previousSong.artist}`);
         selectedPlaylist.currentSongIndex = currentIndex;
     }
@@ -313,7 +311,7 @@ function findMatchingSongs(songDatabase: SongDatabase, callback: (matchingSongs:
     askQuestion();
 }
 
-function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
+function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase, returnPlaylist: Playlist): void {
     
     // initiate empty array of matching songs
     const matchingSongs: Song[] = [];
@@ -323,6 +321,7 @@ function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
         matchingSongs.push(...selectedSongs);
         console.log("Matching songs:");
         printSongsIndex(matchingSongs);
+
         function promptQuestion(): void {
             rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
                 const songNumber = parseInt(answer);
@@ -330,7 +329,7 @@ function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
                     const selectedSong = matchingSongs[songNumber - 1]
                     selectedPlaylist.songs.push(selectedSong);
                     console.log(`Added song: ${selectedSong.title} - ${selectedSong.artist} to ${selectedPlaylist.name}`)
-                    playlistMenu(selectedPlaylist);
+                    playlistMenu(returnPlaylist);
                 } else {
                     console.log("Invalid choice.")
                     promptQuestion();

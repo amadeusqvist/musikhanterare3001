@@ -96,10 +96,10 @@ export function playPreviousSong(selectedPlaylist: Playlist): void {
 }
 
 export function shuffleSong(selectedPlaylist: Playlist): void {
-    console.log(`Now playing playlist: ${selectedPlaylist}`);
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
+        console.log(`Now playing playlist: ${selectedPlaylist}`);
         const songs = selectedPlaylist.songs;
         const random_index = Math.floor(Math.random() * songs.length);
         const currentSong = selectedPlaylist.songs[random_index];

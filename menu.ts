@@ -46,6 +46,7 @@ export function choosePlaylistMenu(playlists: PlaylistData): void {
 }
 
 export function playlistMenu(selectedPlaylist: Playlist): void {
+    console.log(`Selected playlist: &{selectedPlaylist.name}`)
     console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");

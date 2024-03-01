@@ -31,7 +31,6 @@ export function playSpecificSong(selectedPlaylist: Playlist): void {
         console.log("Playlist is empty.");
         playlistMenu(selectedPlaylist);    
     }
-    console.log(`Playlist: ${selectedPlaylist.name}`);
     printSongsIndex(selectedPlaylist.songs);
 
     rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
@@ -99,7 +98,6 @@ export function shuffleSong(selectedPlaylist: Playlist): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
-        console.log(`Now playing playlist: ${selectedPlaylist}`);
         const songs = selectedPlaylist.songs;
         const random_index = Math.floor(Math.random() * songs.length);
         const currentSong = selectedPlaylist.songs[random_index];

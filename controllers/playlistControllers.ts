@@ -62,7 +62,7 @@ export function removeSong(selectedPlaylist: Playlist): void {
         console.log("Playlist is empty.");
         playlistMenu(selectedPlaylist);
     } else {
-        console.log(`Songs in playlist "${selectedPlaylist.name}":`);
+        console.log(`Songs in playlist ${selectedPlaylist.name}:`);
         printSongsIndex(selectedPlaylist.songs);
         removeSongHelper(selectedPlaylist);
     }

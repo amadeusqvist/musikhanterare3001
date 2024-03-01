@@ -18,7 +18,7 @@ type SongDatabase = {
 
 function loadSongs(): SongDatabase {
     try {
-        const data = fs.readFileSync('songs.json', 'utf8');
+        const data = fs.readFileSync('songsdb.json', 'utf8');
         return JSON.parse(data) as SongDatabase;
     } catch (error) {
         console.error('Error loading songs:', error);
@@ -48,6 +48,8 @@ function loadPlaylists(): PlaylistData {
 }
 
 const playlists: PlaylistData = loadPlaylists();
+
+const songData: SongDatabase = loadSongs();
 
 const songQueue = playlists["songQueue"];
 
@@ -140,6 +142,7 @@ function playlistMenu(selectedPlaylist: Playlist): void {
     console.log("[9] Queue song");
     console.log("[10] View queued songs");
     console.log("[11] Shuffle");
+    console.log("[12] Change playlist")
 
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
@@ -150,12 +153,18 @@ function playlistMenu(selectedPlaylist: Playlist): void {
             playNextSong(selectedPlaylist, playlists);
         } else if (answer === '4') {
             playPreviousSong(selectedPlaylist);
+        } else if (answer === '7') {
+            addSong(selectedPlaylist, songData);
         } else if (answer === '8') {
             removeSong(selectedPlaylist);
+        } else if (answer === '9') {
+            addSong(songQueue, songData);
         } else if (answer === '10') {
             viewQueue(selectedPlaylist, songQueue);
         } else if (answer === '11') {
             shuffleSong(selectedPlaylist);
+        } else if (answer === '12') {
+            mainMenu();
         } else {
             console.log("Invalid choice. Please enter 1 or 2.");
             playlistMenu(selectedPlaylist); // Prompt again if choice is invalid
@@ -304,7 +313,6 @@ function findMatchingSongs(songDatabase: SongDatabase, callback: (matchingSongs:
     askQuestion();
 }
 
-
 function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
     
     // initiate empty array of matching songs
@@ -313,20 +321,23 @@ function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase): void {
     // add all matching songs into the matchingSongs array
     findMatchingSongs(songDatabase, (selectedSongs: Song[]) => {
         matchingSongs.push(...selectedSongs);
-    });
-
-    // print all the songs Index
-    console.log("Matching songs:");
-    printSongsIndex(matchingSongs);
-
-    rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
-        const songNumber = parseInt(answer);
-        if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
-            const selectedSong = matchingSongs[songNumber - 1]
-            selectedPlaylist.songs.push(selectedSong);
-        } else {
-            // if invalid input print options again
+        console.log("Matching songs:");
+        printSongsIndex(matchingSongs);
+        function promptQuestion(): void {
+            rl.question("Enter the number of the song you wish to play: ", (answer: string): void => {
+                const songNumber = parseInt(answer);
+                if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
+                    const selectedSong = matchingSongs[songNumber - 1]
+                    selectedPlaylist.songs.push(selectedSong);
+                    console.log(`Added song: ${selectedSong.title} - ${selectedSong.artist} to ${selectedPlaylist.name}`)
+                    playlistMenu(selectedPlaylist);
+                } else {
+                    console.log("Invalid choice.")
+                    promptQuestion();
+                }
+            });
         }
+        promptQuestion();
     });
 }
 

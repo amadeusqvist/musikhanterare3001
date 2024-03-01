@@ -4,7 +4,7 @@ var readline = require("readline");
 var fs = require("fs");
 function loadSongs() {
     try {
-        var data = fs.readFileSync('songs.json', 'utf8');
+        var data = fs.readFileSync('songsdb.json', 'utf8');
         return JSON.parse(data);
     }
     catch (error) {
@@ -24,6 +24,7 @@ function loadPlaylists() {
     }
 }
 var playlists = loadPlaylists();
+var songData = loadSongs();
 var songQueue = playlists["songQueue"];
 var rl = readline.createInterface({
     input: process.stdin,
@@ -59,7 +60,8 @@ function choosePlaylistMenu(playlists) {
             var playlistNames = Object.keys(playlists);
             var selectedPlaylistKey = playlistNames[index - 1];
             var selectedPlaylist = playlists[selectedPlaylistKey];
-            printSongs(selectedPlaylist);
+            console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
+            printSongs(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
         }
         else {
@@ -74,17 +76,15 @@ function choosePlaylistMenu(playlists) {
  * @param songs - The array of songs in the playlist.
  * @returns Void.
  */
-function printSongs(selectedPlaylist) {
-    console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
-    for (var i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log("".concat(selectedPlaylist.songs[i].title, " - ").concat(selectedPlaylist.songs[i].artist));
+function printSongs(songArray) {
+    for (var i = 0; i < songArray.length; i++) {
+        console.log("".concat(songArray[i].title, " - ").concat(songArray[i].artist));
     }
 }
 //The same as printSongs but also adds an index to each song.
-function printSongsIndex(selectedPlaylist) {
-    console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
-    for (var i = 0; i < selectedPlaylist.songs.length; i++) {
-        console.log("[".concat(i + 1, "] ").concat(selectedPlaylist.songs[i].title, " - ").concat(selectedPlaylist.songs[i].artist));
+function printSongsIndex(songArray) {
+    for (var i = 0; i < songArray.length; i++) {
+        console.log("[".concat(i + 1, "] ").concat(songArray[i].title, " - ").concat(songArray[i].artist));
     }
 }
 /**
@@ -110,6 +110,7 @@ function playlistMenu(selectedPlaylist) {
     console.log("[9] Queue song");
     console.log("[10] View queued songs");
     console.log("[11] Shuffle");
+    console.log("[12] Change playlist");
     rl.question("Enter your choice: ", function (answer) {
         if (answer === '1') {
             playPlaylist(selectedPlaylist);
@@ -123,14 +124,23 @@ function playlistMenu(selectedPlaylist) {
         else if (answer === '4') {
             playPreviousSong(selectedPlaylist);
         }
+        else if (answer === '7') {
+            addSong(selectedPlaylist, songData);
+        }
         else if (answer === '8') {
             removeSong(selectedPlaylist);
+        }
+        else if (answer === '9') {
+            addSong(songQueue, songData);
         }
         else if (answer === '10') {
             viewQueue(selectedPlaylist, songQueue);
         }
         else if (answer === '11') {
             shuffleSong(selectedPlaylist);
+        }
+        else if (answer === '12') {
+            mainMenu();
         }
         else {
             console.log("Invalid choice. Please enter 1 or 2.");
@@ -140,7 +150,7 @@ function playlistMenu(selectedPlaylist) {
 }
 function viewQueue(selectedPlaylist, songQueue) {
     if (songQueue.songs.length > 0) {
-        printSongsIndex(songQueue);
+        printSongsIndex(songQueue.songs);
     }
     else {
         console.log("There are no queued songs.");
@@ -173,7 +183,7 @@ function playPlaylist(selectedPlaylist) {
  */
 function playSpecificSong(selectedPlaylist) {
     console.log("Playlist: ".concat(selectedPlaylist.name));
-    printSongsIndex(selectedPlaylist);
+    printSongsIndex(selectedPlaylist.songs);
     rl.question("Enter the number of the song you wish to play: ", function (answer) {
         var songIndex = parseInt(answer);
         if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
@@ -255,29 +265,48 @@ function searchSongDatabase(songDatabase, searchTerm) {
     }
     return matchingSongs;
 }
-function addSong(selectedPlaylist, songDatabase) {
-    rl.question("Search after a song: ", function (answer) {
-        var searchTerm = answer;
-        var matchingSongs = searchSongDatabase(songDatabase, searchTerm);
-        if (matchingSongs.length === 0) {
-            console.log("There were no matching songs.");
-        }
-        else {
-            console.log("Matching songs:");
-            for (var i = 0; i < matchingSongs.length; i++) {
-                console.log("".concat([i + 1], " ").concat(matchingSongs[i].title, " - ").concat(matchingSongs[i].artist));
+function findMatchingSongs(songDatabase, callback) {
+    var askQuestion = function () {
+        rl.question("Search after a song: ", function (answer) {
+            var searchTerm = answer;
+            var matchingSongs = searchSongDatabase(songDatabase, searchTerm);
+            if (matchingSongs.length === 0) {
+                console.log("There were no matching songs. Please try again.");
+                // Recursively call the function to allow the user to try again
+                askQuestion();
             }
+            else {
+                // Callback with matchingSongs array
+                callback(matchingSongs);
+            }
+        });
+    };
+    askQuestion();
+}
+function addSong(selectedPlaylist, songDatabase) {
+    // initiate empty array of matching songs
+    var matchingSongs = [];
+    // add all matching songs into the matchingSongs array
+    findMatchingSongs(songDatabase, function (selectedSongs) {
+        matchingSongs.push.apply(matchingSongs, selectedSongs);
+        console.log("Matching songs:");
+        printSongsIndex(matchingSongs);
+        function promptQuestion() {
             rl.question("Enter the number of the song you wish to play: ", function (answer) {
                 var songNumber = parseInt(answer);
                 if (!isNaN(songNumber) && songNumber > 0 && songNumber <= matchingSongs.length) {
                     var selectedSong = matchingSongs[songNumber - 1];
                     selectedPlaylist.songs.push(selectedSong);
+                    console.log("Added song: ".concat(selectedSong.title, " - ").concat(selectedSong.artist, " to ").concat(selectedPlaylist.name));
+                    playlistMenu(selectedPlaylist);
                 }
                 else {
-                    // if invalid input print options again
+                    console.log("Invalid choice.");
+                    promptQuestion();
                 }
             });
         }
+        promptQuestion();
     });
 }
 function removeSong(selectedPlaylist) {
@@ -285,7 +314,8 @@ function removeSong(selectedPlaylist) {
         console.log("Playlist is empty.");
     }
     else {
-        printSongs(selectedPlaylist);
+        console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
+        printSongs(selectedPlaylist.songs);
         rl.question("Enter the index of the song you want to remove: ", function (answer) {
             var songIndex = parseInt(answer);
             if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {
@@ -305,7 +335,7 @@ function shuffleSong(selectedPlaylist) {
     else {
         var songs = selectedPlaylist.songs;
         var random_index = Math.floor(Math.random() * songs.length);
-        var currentSong = songs.splice(random_index, 1)[0];
+        var currentSong = selectedPlaylist.songs[random_index];
         console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
     }
     playlistMenu(selectedPlaylist);

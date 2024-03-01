@@ -347,16 +347,21 @@ function removeSong(selectedPlaylist: Playlist): void {
     } else {
         console.log(`Songs in playlist "${selectedPlaylist.name}":`);
         printSongs(selectedPlaylist.songs);
-        rl.question("Enter the index of the song you want to remove: ", (answer: string): void => {
-            const songIndex = parseInt(answer);
-            if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {
-                selectedPlaylist.songs = selectedPlaylist.songs.slice(0, songIndex), selectedPlaylist.songs.slice(songIndex + 1)
-                if (selectedPlaylist.currentSongIndex < songIndex) {
-                    selectedPlaylist.currentSongIndex = selectedPlaylist.currentSongIndex - 1;
+        function promptQuestion(): void {
+            rl.question("Enter the index of the song you want to remove: ", (answer: string): void => {
+                const songIndex = parseInt(answer);
+                if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {
+                    selectedPlaylist.songs = selectedPlaylist.songs.slice(0, songIndex), selectedPlaylist.songs.slice(songIndex + 1)
+                    if (selectedPlaylist.currentSongIndex < songIndex) {
+                        selectedPlaylist.currentSongIndex = selectedPlaylist.currentSongIndex - 1;
+                    }
+                } else {
+                    console.log("Invalid choice.")
+                    promptQuestion();
                 }
-
-            }
-        });
+            });
+        }
+        promptQuestion();
     }
 }
 

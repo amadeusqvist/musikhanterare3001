@@ -11,7 +11,7 @@ export function mainMenu(): void {
         if (answer === '1') {
             choosePlaylistMenu(playlists);
         } else if (answer === '2') {
-            makePlaylistMenu();
+            makePlaylistMenu(playlists);
         } else {
             console.log("Invalid choice. Please enter 1 or 2.");
             mainMenu();
@@ -85,11 +85,19 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
     });
 }
 
-export function makePlaylistMenu(): void {
-    console.log("Make a new playlist");
-    rl.question("Give the playlist a name: ", (name: string): void => {
-        console.log("Playlist name: " + name);
-        // Handle creating playlist here
-        rl.close();
+export function makePlaylistMenu(playlists: PlaylistData): void {
+    rl.question("Give the new playlist a name: ", (playlistName: string): void => {
+        if (playlists[playlistName]) {
+            console.log("Playlistname already exists");
+            makePlaylistMenu(playlists);
+        } else {
+            const newPlaylist: Playlist = {
+                name: playlistName,
+                songs: [],
+                currentSongIndex: -1
+            };
+            playlists[playlistName] = newPlaylist;
+            playlistMenu(playlists[playlistName]);
+        }
     });
 }

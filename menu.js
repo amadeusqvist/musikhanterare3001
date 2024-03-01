@@ -13,7 +13,7 @@ function mainMenu() {
             choosePlaylistMenu(types_and_constants_1.playlists);
         }
         else if (answer === '2') {
-            makePlaylistMenu();
+            makePlaylistMenu(types_and_constants_1.playlists);
         }
         else {
             console.log("Invalid choice. Please enter 1 or 2.");
@@ -96,12 +96,22 @@ function playlistMenu(selectedPlaylist) {
     });
 }
 exports.playlistMenu = playlistMenu;
-function makePlaylistMenu() {
+function makePlaylistMenu(playlists) {
     console.log("Make a new playlist");
-    types_and_constants_1.rl.question("Give the playlist a name: ", function (name) {
-        console.log("Playlist name: " + name);
-        // Handle creating playlist here
-        types_and_constants_1.rl.close();
+    types_and_constants_1.rl.question("Give the playlist a name: ", function (playlistName) {
+        if (playlists[playlistName]) {
+            console.log("Playlistname already exists");
+            makePlaylistMenu(playlists);
+        }
+        else {
+            var newPlaylist = {
+                name: playlistName,
+                songs: [],
+                currentSongIndex: -1
+            };
+            playlists[playlistName] = newPlaylist;
+            playlistMenu(playlists[playlistName]);
+        }
     });
 }
 exports.makePlaylistMenu = makePlaylistMenu;

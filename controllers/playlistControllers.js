@@ -61,6 +61,7 @@ exports.removeSongHelper = removeSongHelper;
 function removeSong(selectedPlaylist) {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
+        (0, menu_1.playlistMenu)(selectedPlaylist);
     }
     else {
         console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));

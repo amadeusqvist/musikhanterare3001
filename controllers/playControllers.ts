@@ -9,10 +9,10 @@ import { printSongsIndex } from "./helperFunctions";
  * @returns Void.
  */
 export function playPlaylist(selectedPlaylist: Playlist): void {
-    console.log(`Now playing playlist: ${selectedPlaylist.name}`);
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
+        console.log(`Now playing playlist: ${selectedPlaylist.name}`);
         const currentSong = selectedPlaylist.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         selectedPlaylist.currentSongIndex = 0;
@@ -27,6 +27,10 @@ export function playPlaylist(selectedPlaylist: Playlist): void {
  * @returns Void.
  */
 export function playSpecificSong(selectedPlaylist: Playlist): void {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty.");
+        playlistMenu(selectedPlaylist);    
+    }
     console.log(`Playlist: ${selectedPlaylist.name}`);
     printSongsIndex(selectedPlaylist.songs);
 
@@ -45,7 +49,10 @@ export function playSpecificSong(selectedPlaylist: Playlist): void {
 }
 
 export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData): void {
-    if (songQueue.songs.length > 0) {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty.");
+        playlistMenu(selectedPlaylist);    
+    } else if (songQueue.songs.length > 0) {
         console.log("Playing the next song from the song queue:");
         const currentSong = songQueue.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
@@ -70,7 +77,9 @@ export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData
  * @returns Void.
  */
 export function playPreviousSong(selectedPlaylist: Playlist): void {
-    if (selectedPlaylist.currentSongIndex === -1) {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty")
+    } else if (selectedPlaylist.currentSongIndex === -1) {
         console.log("No song currently playing.");
     } else if (selectedPlaylist.currentSongIndex === 0) {
         const currentIndex = selectedPlaylist.songs.length - 1;

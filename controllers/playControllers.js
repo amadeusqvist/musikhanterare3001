@@ -11,11 +11,11 @@ var helperFunctions_1 = require("./helperFunctions");
  * @returns Void.
  */
 function playPlaylist(selectedPlaylist) {
-    console.log("Now playing playlist: ".concat(selectedPlaylist.name));
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     }
     else {
+        console.log("Now playing playlist: ".concat(selectedPlaylist.name));
         var currentSong = selectedPlaylist.songs[0];
         console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
         selectedPlaylist.currentSongIndex = 0;
@@ -30,6 +30,10 @@ exports.playPlaylist = playPlaylist;
  * @returns Void.
  */
 function playSpecificSong(selectedPlaylist) {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty.");
+        (0, menu_1.playlistMenu)(selectedPlaylist);
+    }
     console.log("Playlist: ".concat(selectedPlaylist.name));
     (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
     types_and_constants_1.rl.question("Enter the number of the song you wish to play: ", function (answer) {
@@ -75,7 +79,10 @@ exports.playNextSong = playNextSong;
  * @returns Void.
  */
 function playPreviousSong(selectedPlaylist) {
-    if (selectedPlaylist.currentSongIndex === -1) {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty");
+    }
+    else if (selectedPlaylist.currentSongIndex === -1) {
         console.log("No song currently playing.");
     }
     else if (selectedPlaylist.currentSongIndex === 0) {

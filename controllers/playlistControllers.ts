@@ -43,11 +43,12 @@ export function addSong(selectedPlaylist: Playlist, songDatabase: SongDatabase, 
 export function removeSongHelper(selectedPlaylist: Playlist): void {
     rl.question("Enter the index of the song you want to remove: ", (answer: string): void => {
         const songIndex = parseInt(answer);
-        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {
-            selectedPlaylist.songs = selectedPlaylist.songs.slice(0, songIndex), selectedPlaylist.songs.slice(songIndex + 1)
-            if (selectedPlaylist.currentSongIndex < songIndex) {
-                selectedPlaylist.currentSongIndex = selectedPlaylist.currentSongIndex - 1;
+        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
+            selectedPlaylist.songs.splice(songIndex - 1, 1); // Adjust index by 1 and remove 1 element
+            if (selectedPlaylist.currentSongIndex >= songIndex) {
+                selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
             }
+            playlistMenu(selectedPlaylist);
         } else {
             console.log("Invalid choice.")
             removeSongHelper(selectedPlaylist);
@@ -55,12 +56,13 @@ export function removeSongHelper(selectedPlaylist: Playlist): void {
     });
 }
 
+
 export function removeSong(selectedPlaylist: Playlist): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
         console.log(`Songs in playlist "${selectedPlaylist.name}":`);
-        printSongs(selectedPlaylist.songs);
+        printSongsIndex(selectedPlaylist.songs);
         removeSongHelper(selectedPlaylist);
     }
 }

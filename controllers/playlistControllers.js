@@ -44,11 +44,12 @@ exports.addSong = addSong;
 function removeSongHelper(selectedPlaylist) {
     types_and_constants_1.rl.question("Enter the index of the song you want to remove: ", function (answer) {
         var songIndex = parseInt(answer);
-        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= Object.keys(selectedPlaylist).length) {
-            selectedPlaylist.songs = selectedPlaylist.songs.slice(0, songIndex), selectedPlaylist.songs.slice(songIndex + 1);
-            if (selectedPlaylist.currentSongIndex < songIndex) {
-                selectedPlaylist.currentSongIndex = selectedPlaylist.currentSongIndex - 1;
+        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
+            selectedPlaylist.songs.splice(songIndex - 1, 1); // Adjust index by 1 and remove 1 element
+            if (selectedPlaylist.currentSongIndex >= songIndex) {
+                selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
             }
+            (0, menu_1.playlistMenu)(selectedPlaylist);
         }
         else {
             console.log("Invalid choice.");
@@ -63,7 +64,7 @@ function removeSong(selectedPlaylist) {
     }
     else {
         console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
-        (0, helperFunctions_1.printSongs)(selectedPlaylist.songs);
+        (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
         removeSongHelper(selectedPlaylist);
     }
 }

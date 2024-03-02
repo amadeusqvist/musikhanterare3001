@@ -5,15 +5,20 @@ var types_and_constants_1 = require("./types and constants");
 var helperFunctions_1 = require("./controllers/helperFunctions");
 var playControllers_1 = require("./controllers/playControllers");
 var playlistControllers_1 = require("./controllers/playlistControllers");
+var spotify_api_1 = require("./spotify-api");
 function mainMenu() {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
+    console.log("[3] Import Spotify playlist");
     types_and_constants_1.rl.question("Enter your choice: ", function (answer) {
         if (answer === '1') {
             choosePlaylistMenu(types_and_constants_1.playlists);
         }
         else if (answer === '2') {
             makePlaylistMenu(types_and_constants_1.playlists);
+        }
+        else if (answer === '3') {
+            (0, spotify_api_1.importPlaylist)();
         }
         else {
             console.log("Invalid choice. Please enter 1 or 2.");
@@ -48,6 +53,7 @@ function choosePlaylistMenu(playlists) {
 }
 exports.choosePlaylistMenu = choosePlaylistMenu;
 function playlistMenu(selectedPlaylist) {
+    console.log("Selected playlist: &{selectedPlaylist.name}");
     console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");
@@ -97,8 +103,7 @@ function playlistMenu(selectedPlaylist) {
 }
 exports.playlistMenu = playlistMenu;
 function makePlaylistMenu(playlists) {
-    console.log("Make a new playlist");
-    types_and_constants_1.rl.question("Give the playlist a name: ", function (playlistName) {
+    types_and_constants_1.rl.question("Give the new playlist a name: ", function (playlistName) {
         if (playlists[playlistName]) {
             console.log("Playlistname already exists");
             makePlaylistMenu(playlists);

@@ -12,7 +12,6 @@ export function playPlaylist(selectedPlaylist: Playlist): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     } else {
-        console.log(`Now playing playlist: ${selectedPlaylist.name}`);
         const currentSong = selectedPlaylist.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         selectedPlaylist.currentSongIndex = 0;

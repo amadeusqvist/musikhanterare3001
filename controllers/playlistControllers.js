@@ -64,7 +64,7 @@ function removeSong(selectedPlaylist) {
         (0, menu_1.playlistMenu)(selectedPlaylist);
     }
     else {
-        console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
+        console.log("Songs in playlist ".concat(selectedPlaylist.name, ":"));
         (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
         removeSongHelper(selectedPlaylist);
     }

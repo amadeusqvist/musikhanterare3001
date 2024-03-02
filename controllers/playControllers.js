@@ -34,7 +34,6 @@ function playSpecificSong(selectedPlaylist) {
         console.log("Playlist is empty.");
         (0, menu_1.playlistMenu)(selectedPlaylist);
     }
-    console.log("Playlist: ".concat(selectedPlaylist.name));
     (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
     types_and_constants_1.rl.question("Enter the number of the song you wish to play: ", function (answer) {
         var songIndex = parseInt(answer);
@@ -52,7 +51,11 @@ function playSpecificSong(selectedPlaylist) {
 }
 exports.playSpecificSong = playSpecificSong;
 function playNextSong(selectedPlaylist, playlists) {
-    if (types_and_constants_1.songQueue.songs.length > 0) {
+    if (selectedPlaylist.songs.length === 0) {
+        console.log("Playlist is empty.");
+        (0, menu_1.playlistMenu)(selectedPlaylist);
+    }
+    else if (types_and_constants_1.songQueue.songs.length > 0) {
         console.log("Playing the next song from the song queue:");
         var currentSong = types_and_constants_1.songQueue.songs[0];
         console.log("Now playing: ".concat(currentSong.title, " - ").concat(currentSong.artist));
@@ -101,7 +104,6 @@ function playPreviousSong(selectedPlaylist) {
 }
 exports.playPreviousSong = playPreviousSong;
 function shuffleSong(selectedPlaylist) {
-    console.log("Now playing playlist: ".concat(selectedPlaylist));
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
     }

@@ -2,16 +2,20 @@ import {rl, playlists, Playlist, PlaylistData, songData, songQueue} from './type
 import { printPlaylists, printSongs } from './controllers/helperFunctions';
 import { playPlaylist, playNextSong, playPreviousSong, playSpecificSong, shuffleSong} from './controllers/playControllers';
 import { addSong, removeSong, viewQueue } from './controllers/playlistControllers';
+import { importPlaylist} from './spotify-api'
 
 
 export function mainMenu(): void {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
+    console.log("[3] Import Spotify playlist")
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
             choosePlaylistMenu(playlists);
         } else if (answer === '2') {
             makePlaylistMenu(playlists);
+        } else if (answer === '3') {
+            importPlaylist();
         } else {
             console.log("Invalid choice. Please enter 1 or 2.");
             mainMenu();
@@ -46,7 +50,7 @@ export function choosePlaylistMenu(playlists: PlaylistData): void {
 }
 
 export function playlistMenu(selectedPlaylist: Playlist): void {
-    console.log(`Selected playlist: &{selectedPlaylist.name}`);
+    console.log(`Selected playlist: ${selectedPlaylist.name}`);
     console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");
@@ -56,7 +60,7 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
     console.log("[7] Queue song");
     console.log("[8] View queued songs");
     console.log("[9] Shuffle");
-    console.log("[10] Change playlist")
+    console.log("[10] Change playlist");
 
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {

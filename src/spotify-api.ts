@@ -110,10 +110,10 @@ function addTrackToPlaylist(playlistName: string, trackName: string, artistName:
     }
   
     const song: Song = {
-      title: trackName,
-      artist: artistName,
-      album: albumName,
-      collaborators: allFeaturedArtists,
+        title: trackName,
+        artist: artistName,
+        album: albumName,
+        collaborators: allFeaturedArtists,
     };
   
     // Check if the playlist already exists, create it if not

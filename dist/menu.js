@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makePlaylistMenu = exports.playlistMenu = exports.choosePlaylistMenu = exports.mainMenu = void 0;
-var types_and_constants_1 = require("./types and constants");
-var helperFunctions_1 = require("./controllers/helperFunctions");
-var playControllers_1 = require("./controllers/playControllers");
-var playlistControllers_1 = require("./controllers/playlistControllers");
-var spotify_api_1 = require("./spotify-api");
+const types_and_constants_1 = require("./types and constants");
+const helperFunctions_1 = require("./controllers/helperFunctions");
+const playControllers_1 = require("./controllers/playControllers");
+const playlistControllers_1 = require("./controllers/playlistControllers");
+const spotify_api_1 = require("./spotify-api");
 function mainMenu() {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
     console.log("[3] Import Spotify playlist");
-    types_and_constants_1.rl.question("Enter your choice: ", function (answer) {
+    types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
             choosePlaylistMenu(types_and_constants_1.playlists);
         }
@@ -35,13 +35,13 @@ exports.mainMenu = mainMenu;
  */
 function choosePlaylistMenu(playlists) {
     (0, helperFunctions_1.printPlaylists)(playlists);
-    types_and_constants_1.rl.question("Enter the index of the playlist you want to choose: ", function (answer) {
-        var index = parseInt(answer);
+    types_and_constants_1.rl.question("Enter the index of the playlist you want to choose: ", (answer) => {
+        const index = parseInt(answer);
         if (!isNaN(index) && index > 0 && index <= Object.keys(playlists).length) {
-            var playlistNames = Object.keys(playlists);
-            var selectedPlaylistKey = playlistNames[index - 1];
-            var selectedPlaylist = playlists[selectedPlaylistKey];
-            console.log("Songs in playlist \"".concat(selectedPlaylist.name, "\":"));
+            const playlistNames = Object.keys(playlists);
+            const selectedPlaylistKey = playlistNames[index - 1];
+            const selectedPlaylist = playlists[selectedPlaylistKey];
+            console.log(`Songs in playlist "${selectedPlaylist.name}":`);
             (0, helperFunctions_1.printSongs)(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
         }
@@ -53,7 +53,7 @@ function choosePlaylistMenu(playlists) {
 }
 exports.choosePlaylistMenu = choosePlaylistMenu;
 function playlistMenu(selectedPlaylist) {
-    console.log("Selected playlist: &{selectedPlaylist.name}");
+    console.log(`Selected playlist: ${selectedPlaylist.name}`);
     console.log("[1] Play playlist");
     console.log("[2] Play specific song");
     console.log("[3] Play next song");
@@ -64,7 +64,7 @@ function playlistMenu(selectedPlaylist) {
     console.log("[8] View queued songs");
     console.log("[9] Shuffle");
     console.log("[10] Change playlist");
-    types_and_constants_1.rl.question("Enter your choice: ", function (answer) {
+    types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
             (0, playControllers_1.playPlaylist)(selectedPlaylist);
         }
@@ -103,13 +103,13 @@ function playlistMenu(selectedPlaylist) {
 }
 exports.playlistMenu = playlistMenu;
 function makePlaylistMenu(playlists) {
-    types_and_constants_1.rl.question("Give the new playlist a name: ", function (playlistName) {
+    types_and_constants_1.rl.question("Give the new playlist a name: ", (playlistName) => {
         if (playlists[playlistName]) {
             console.log("Playlistname already exists");
             makePlaylistMenu(playlists);
         }
         else {
-            var newPlaylist = {
+            const newPlaylist = {
                 name: playlistName,
                 songs: [],
                 currentSongIndex: -1

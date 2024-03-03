@@ -1,10 +1,15 @@
 import { SongDatabase, PlaylistData, Song, rl } from "../types and constants";
 import * as fs from 'fs';
+import * as path from 'path';
 
+// Assuming helperFunctions.ts is in the controllers directory
+const dataFolderPath = path.join(__dirname, '..', '..', 'data');
+const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
+const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
 
 export function loadSongs(): SongDatabase {
     try {
-        const data = fs.readFileSync('songsdb.json', 'utf8');
+        const data = fs.readFileSync(songsDbPath, 'utf8');
         return JSON.parse(data) as SongDatabase;
     } catch (error) {
         console.error('Error loading songs:', error);
@@ -15,7 +20,7 @@ export function loadSongs(): SongDatabase {
 // Load playlists from JSON file
 export function loadPlaylists(): PlaylistData {
 	try {
-		const data = fs.readFileSync('playlistsdb.json', 'utf8');
+		const data = fs.readFileSync(playlistsDbPath, 'utf8');
 		return JSON.parse(data) as PlaylistData;
 	} catch (error) {
 		console.error('Error loading playlists:', error);

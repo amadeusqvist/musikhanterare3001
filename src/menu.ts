@@ -4,7 +4,11 @@ import { playPlaylist, playNextSong, playPreviousSong, playSpecificSong, shuffle
 import { addSong, removeSong, viewQueue } from './controllers/playlistControllers';
 import { importPlaylist} from './spotify-api'
 
-
+/**
+ * Displays the main menu and prompts the user to choose an action.
+ * Options include choosing a playlist, making a new playlist, or importing a Spotify playlist.
+ * @returns Void.
+ */
 export function mainMenu(): void {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
@@ -49,6 +53,12 @@ export function choosePlaylistMenu(playlists: PlaylistData): void {
     });
 }
 
+/**
+ * Displays the menu for the selected playlist and prompts the user to choose an action.
+ * Options include playing the playlist, playing a specific song, managing the playlist, and more.
+ * @param selectedPlaylist - The playlist selected by the user.
+ * @returns Void.
+ */
 export function playlistMenu(selectedPlaylist: Playlist): void {
     console.log(`Selected playlist: ${selectedPlaylist.name}`);
     console.log("[1] Play playlist");
@@ -85,11 +95,17 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
             mainMenu();
         } else {
             console.log("Invalid choice. Please enter valid number (1-10).");
-            playlistMenu(selectedPlaylist); // Prompt again if choice is invalid
+            playlistMenu(selectedPlaylist);
         }
     });
 }
 
+/**
+ * Displays the menu for creating a new playlist and prompts the user to enter a name.
+ * Checks if the entered name already exists and handles accordingly.
+ * @param playlists - The object containing all the playlists.
+ * @returns Void.
+ */
 export function makePlaylistMenu(playlists: PlaylistData): void {
     rl.question("Give the new playlist a name: ", (playlistName: string): void => {
         if (playlists[playlistName]) {

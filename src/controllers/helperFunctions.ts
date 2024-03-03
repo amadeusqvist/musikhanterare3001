@@ -2,11 +2,15 @@ import { SongDatabase, PlaylistData, Song, rl } from "../types and constants";
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Assuming helperFunctions.ts is in the controllers directory
+// Define paths to the playlistdb.json and songsdb.json
 const dataFolderPath = path.join(__dirname, '..', '..', 'data');
 const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
 const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
 
+/**
+ * Loads songs from the JSON file specified in the songsDbPath and returns a Song Database.
+ * @returns SongDatabase - The loaded Song Database.
+ */
 export function loadSongs(): SongDatabase {
     try {
         const data = fs.readFileSync(songsDbPath, 'utf8');
@@ -17,7 +21,10 @@ export function loadSongs(): SongDatabase {
     }
 }
 
-// Load playlists from JSON file
+/**
+ * Loads playlists from the JSON file specified in the playlistsDbPath and returns a Playlist Database.
+ * @returns PlaylistData - The loaded Playlist Database.
+ */
 export function loadPlaylists(): PlaylistData {
 	try {
 		const data = fs.readFileSync(playlistsDbPath, 'utf8');
@@ -30,18 +37,21 @@ export function loadPlaylists(): PlaylistData {
 
 /**
  * Prints the list of songs in a playlist along with their titles and artists.
- * @param playlistName - The name of the playlist.
- * @param songs - The array of songs in the playlist.
+ * @param songArray - The array of songs in the playlist.
  * @returns Void.
  */
-export function printSongs(songArray: Song[]): void {
+export function printSongs(songArray: Array<Song>): void {
     for (let i = 0; i < songArray.length; i++) {
         console.log(`${songArray[i].title} - ${songArray[i].artist}`);
     }
 }
 
-//The same as printSongs but also adds an index to each song.
-export function printSongsIndex(songArray: Song[]): void {
+/**
+ * Prints the list of songs in a playlist along with their titles, artists, and index.
+ * @param songArray - The array of songs in the playlist.
+ * @returns Void.
+ */
+export function printSongsIndex(songArray: Array<Song>): void {
     for (let i = 0; i < songArray.length; i++) {
         console.log(`[${i + 1}] ${songArray[i].title} - ${songArray[i].artist}`);
     }
@@ -60,13 +70,13 @@ export function printPlaylists(playlists: PlaylistData): void {
 }
 
 /**
-Searches the database for songs.
-@param database - The songdatabase.
-@param searchTerm - The searchterm may be the title or the artist
-@returns An array of songs matching the search criteria.
-*/
+ * Searches the Song Database for songs matching the search criteria.
+ * @param songDatabase - The Song Database to search.
+ * @param searchTerm - The search term, which may be the title, the artist or a featured artist.
+ * @returns Array<Song> - An array of songs matching the search criteria.
+ */
 export function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Array<Song> {
-    const matchingSongs: Song[] = [];
+    const matchingSongs: Array<Song> = [];
     const lowercaseSearchTerm = searchTerm.toLowerCase();
 
     for (const songId in songDatabase.songs) {
@@ -88,7 +98,14 @@ export function searchSongDatabase(songDatabase: SongDatabase, searchTerm: strin
     return matchingSongs;
 }
 
-export function findMatchingSongs(songDatabase: SongDatabase, callback: (matchingSongs: Song[]) => void): void {
+/**
+ * Asks the user to enter a search term and calls the callback function with the matching songs.
+ * Continues to prompt the user until at least one matching song is found.
+ * @param songDatabase - The Song Database to search.
+ * @param callback - The callback function to be called with the matching songs.
+ * @returns Void.
+ */
+export function findMatchingSongs(songDatabase: SongDatabase, callback: (matchingSongs: Array<Song>) => void): void {
     const askQuestion = () => {
         rl.question("Search after a song: ", (answer: string): void => {
             const searchTerm = answer;
@@ -96,10 +113,8 @@ export function findMatchingSongs(songDatabase: SongDatabase, callback: (matchin
 
             if (matchingSongs.length === 0) {
                 console.log("There were no matching songs. Please try again.");
-                // Recursively call the function to allow the user to try again
                 askQuestion();
             } else {
-                // Callback with matchingSongs array
                 callback(matchingSongs);
             }
         });

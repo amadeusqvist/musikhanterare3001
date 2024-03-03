@@ -27,10 +27,14 @@ exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists 
 const types_and_constants_1 = require("../types and constants");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-// Assuming helperFunctions.ts is in the controllers directory
+// Define paths to the playlistdb.json and songsdb.json
 const dataFolderPath = path.join(__dirname, '..', '..', 'data');
 const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
 const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
+/**
+ * Loads songs from the JSON file specified in the songsDbPath and returns a Song Database.
+ * @returns SongDatabase - The loaded Song Database.
+ */
 function loadSongs() {
     try {
         const data = fs.readFileSync(songsDbPath, 'utf8');
@@ -42,7 +46,10 @@ function loadSongs() {
     }
 }
 exports.loadSongs = loadSongs;
-// Load playlists from JSON file
+/**
+ * Loads playlists from the JSON file specified in the playlistsDbPath and returns a Playlist Database.
+ * @returns PlaylistData - The loaded Playlist Database.
+ */
 function loadPlaylists() {
     try {
         const data = fs.readFileSync(playlistsDbPath, 'utf8');
@@ -56,8 +63,7 @@ function loadPlaylists() {
 exports.loadPlaylists = loadPlaylists;
 /**
  * Prints the list of songs in a playlist along with their titles and artists.
- * @param playlistName - The name of the playlist.
- * @param songs - The array of songs in the playlist.
+ * @param songArray - The array of songs in the playlist.
  * @returns Void.
  */
 function printSongs(songArray) {
@@ -66,7 +72,11 @@ function printSongs(songArray) {
     }
 }
 exports.printSongs = printSongs;
-//The same as printSongs but also adds an index to each song.
+/**
+ * Prints the list of songs in a playlist along with their titles, artists, and index.
+ * @param songArray - The array of songs in the playlist.
+ * @returns Void.
+ */
 function printSongsIndex(songArray) {
     for (let i = 0; i < songArray.length; i++) {
         console.log(`[${i + 1}] ${songArray[i].title} - ${songArray[i].artist}`);
@@ -86,11 +96,11 @@ function printPlaylists(playlists) {
 }
 exports.printPlaylists = printPlaylists;
 /**
-Searches the database for songs.
-@param database - The songdatabase.
-@param searchTerm - The searchterm may be the title or the artist
-@returns An array of songs matching the search criteria.
-*/
+ * Searches the Song Database for songs matching the search criteria.
+ * @param songDatabase - The Song Database to search.
+ * @param searchTerm - The search term, which may be the title, the artist or a featured artist.
+ * @returns Array<Song> - An array of songs matching the search criteria.
+ */
 function searchSongDatabase(songDatabase, searchTerm) {
     const matchingSongs = [];
     const lowercaseSearchTerm = searchTerm.toLowerCase();
@@ -107,6 +117,13 @@ function searchSongDatabase(songDatabase, searchTerm) {
     return matchingSongs;
 }
 exports.searchSongDatabase = searchSongDatabase;
+/**
+ * Asks the user to enter a search term and calls the callback function with the matching songs.
+ * Continues to prompt the user until at least one matching song is found.
+ * @param songDatabase - The Song Database to search.
+ * @param callback - The callback function to be called with the matching songs.
+ * @returns Void.
+ */
 function findMatchingSongs(songDatabase, callback) {
     const askQuestion = () => {
         types_and_constants_1.rl.question("Search after a song: ", (answer) => {
@@ -114,11 +131,9 @@ function findMatchingSongs(songDatabase, callback) {
             const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
             if (matchingSongs.length === 0) {
                 console.log("There were no matching songs. Please try again.");
-                // Recursively call the function to allow the user to try again
                 askQuestion();
             }
             else {
-                // Callback with matchingSongs array
                 callback(matchingSongs);
             }
         });

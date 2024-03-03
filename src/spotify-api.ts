@@ -2,11 +2,14 @@ import axios from 'axios';
 import { SongDatabase, Song, songData, PlaylistData, playlists, rl } from './types and constants';
 import { mainMenu } from './menu';
 
-// Set your Spotify API credentials
+//Spotify API client credentials
 const clientId = 'b878d0f2353a473d90be7c966a105d09';
 const clientSecret = '923899eb95e743ebba6a2f073d259a36';
 
-// Set up the Spotify client credentials
+/**
+ * Fetches the Spotify access token using client credentials and returns it.
+ * @returns Promise<string> - A promise that resolves to the access token.
+ */
 const getToken = async () => {
     const authBuffer = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
     const authHeaders = {
@@ -27,12 +30,16 @@ const getToken = async () => {
     }
 };
 
+/**
+ * Retrieves information about a Spotify playlist using the provided access token and playlist URI.
+ * @param accessToken - The Spotify access token.
+ * @param playlistUri - The URI of the Spotify playlist.
+ * @returns Promise<{ name: string, collaborators: boolean }> - A promise that resolves to an object containing playlist information.
+ */
 const getPlaylistInfo = async (accessToken: string, playlistUri: string) => {
     try {
-        // Extract the playlist ID from the URI
         const playlistId = playlistUri.split('/').pop()?.split('?')[0];
   
-        // Retrieve playlist details
         const playlistResponse = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
             headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -51,12 +58,16 @@ const getPlaylistInfo = async (accessToken: string, playlistUri: string) => {
         }
 };
 
+/**
+ * Retrieves tracks from a Spotify playlist using the provided access token and playlist URI.
+ * @param accessToken - The Spotify access token.
+ * @param playlistUri - The URI of the Spotify playlist.
+ * @returns Promise<Array<any>> - A promise that resolves to an array of tracks.
+ */
 const getPlaylistTracks = async (accessToken: string, playlistUri: string) => {
     try {
-        // Extract the playlist ID from the URI
         const playlistId = playlistUri.split('/').pop()?.split('?')[0];
   
-        // Retrieve tracks from the playlist
         const playlistResponse = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
             headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -78,14 +89,27 @@ const getPlaylistTracks = async (accessToken: string, playlistUri: string) => {
         }
 };
 
+/**
+ * Extracts featured artists from a track object.
+ * @param track - The track object.
+ * @returns Array<string> - An array of featured artists.
+ */
 const extractFeaturedArtists = (track: any) => {
-    const featuredArtists = track.track.artists.slice(1).map((artist: any) => artist.name);
+    const featuredArtists: Array<string> = track.track.artists.slice(1).map((artist: any) => artist.name);
     return featuredArtists;
 };
 
-function addTrackToSongDb(trackName: string, artistName: string, albumName: string, featuredArtists: string, songDatabase: SongDatabase) {
-    // Array dit alla collaborators
-    const allFeaturedArtists: string[] = [];
+/**
+ * Adds a track to the Song Database.
+ * @param trackName - The name of the track.
+ * @param artistName - The name of the artist.
+ * @param albumName - The name of the album.
+ * @param featuredArtists - An array of featured artists.
+ * @param songDatabase - The Song Database object.
+ * @returns void.
+ */
+function addTrackToSongDb(trackName: string, artistName: string, albumName: string, featuredArtists: Array<string>, songDatabase: SongDatabase) {
+    const allFeaturedArtists: Array<string> = [];
 
     if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
         allFeaturedArtists.push(...featuredArtists);
@@ -101,9 +125,18 @@ function addTrackToSongDb(trackName: string, artistName: string, albumName: stri
     songDatabase.songs.push(song);        
 }
 
-function addTrackToPlaylist(playlistName: string, trackName: string, artistName: string, albumName: string, featuredArtists: string[], playlists: PlaylistData) {
-    // Array for all collaborators
-    const allFeaturedArtists: string[] = [];
+/**
+ * Adds a track to a playlist in the Playlist Database.
+ * @param playlistName - The name of the playlist.
+ * @param trackName - The name of the track.
+ * @param artistName - The name of the artist.
+ * @param albumName - The name of the album.
+ * @param featuredArtists - An array of featured artists.
+ * @param playlists - The Playlist Database object.
+ * @returns void.
+ */
+function addTrackToPlaylist(playlistName: string, trackName: string, artistName: string, albumName: string, featuredArtists: Array<string>, playlists: PlaylistData) {
+    const allFeaturedArtists: Array<string> = [];
   
     if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
         allFeaturedArtists.push(...featuredArtists);
@@ -116,7 +149,6 @@ function addTrackToPlaylist(playlistName: string, trackName: string, artistName:
         collaborators: allFeaturedArtists,
     };
   
-    // Check if the playlist already exists, create it if not
     if (!playlists[playlistName]) {
         playlists[playlistName] = {
             name: playlistName,
@@ -125,11 +157,18 @@ function addTrackToPlaylist(playlistName: string, trackName: string, artistName:
         };
     }
   
-    // Add the song to the playlist
     playlists[playlistName].songs.push(song);
 }
-  
-const updateSongsDbAndPlaylistsDb = (tracks: any[], playlistName: string, playlists: PlaylistData, songDatabase: SongDatabase) => {
+
+/**
+ * Updates the Song Database and Playlist Database with the provided tracks and playlist name.
+ * @param tracks - An array of tracks to be added to the databases.
+ * @param playlistName - The name of the playlist.
+ * @param playlists - The Playlist Database object.
+ * @param songDatabase - The Song Database object.
+ * @returns void.
+ */
+const updateSongsDbAndPlaylistsDb = (tracks: Array<any>, playlistName: string, playlists: PlaylistData, songDatabase: SongDatabase) => {
     if (!Array.isArray(tracks)) {
         console.error('Invalid response format. Expected an array of tracks.');
         return;
@@ -141,49 +180,45 @@ const updateSongsDbAndPlaylistsDb = (tracks: any[], playlistName: string, playli
     }
   
     tracks.forEach((track) => {
-        const trackName = track.track.name;
-        const artistName = track.track.artists[0].name;
-        const albumName = track.track.album.name;
+        const trackName: string = track.track.name;
+        const artistName: string = track.track.artists[0].name;
+        const albumName:string = track.track.album.name;
         const featuredArtists = extractFeaturedArtists(track);
     
         addTrackToSongDb(trackName, artistName, albumName, featuredArtists, songDatabase);
-    
-        // Replace 'your_playlist_name' with the desired playlist name
         addTrackToPlaylist(playlistName, trackName, artistName, albumName, featuredArtists, playlists);
     });
 };
-  
+
+/**
+ * Extracts the Spotify playlist URI from a given URL.
+ * @param url - The URL of the Spotify playlist.
+ * @returns string - The extracted playlist URI.
+ */
 function extractPlaylistURI(url: string): string{
-    // Split the URL by '/'
     const urlParts = url.split('/');
-  
-    // Get the last part of the URL (playlist URI)
     const playlistURI = urlParts[urlParts.length - 1];
-  
-    // Remove any query parameters (if present)
     const cleanPlaylistURI = playlistURI.split('?')[0];
-  
     return cleanPlaylistURI;
 }
 
+/**
+ * Imports a Spotify playlist by prompting the user to enter the URL and updating the Song Database and Playlist Database.
+ * @returns void.
+ */
 export const importPlaylist = async () => {
     rl.question("Enter the URL to a Spotify playlist: ", async (url: string) => {
         try {
             const playlistUri = extractPlaylistURI(url);
-  
-            // Get access token
             const accessToken = await getToken();
-  
-            // Print playlist name
+
             const playlistInfo = await getPlaylistInfo(accessToken, playlistUri);
-            const playlistName = playlistInfo.name;
-    
-            // Get and print the tracks from the playlist
+            const playlistName = playlistInfo.name;    
             const playlistTracks = await getPlaylistTracks(accessToken, playlistUri);
+
             updateSongsDbAndPlaylistsDb(playlistTracks, playlistName, playlists, songData);
         } catch (error) {
             console.log('An error occurred:', error);
-            mainMenu();
         } finally {
             mainMenu();
         }

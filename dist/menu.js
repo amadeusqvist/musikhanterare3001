@@ -6,6 +6,11 @@ const helperFunctions_1 = require("./controllers/helperFunctions");
 const playControllers_1 = require("./controllers/playControllers");
 const playlistControllers_1 = require("./controllers/playlistControllers");
 const spotify_api_1 = require("./spotify-api");
+/**
+ * Displays the main menu and prompts the user to choose an action.
+ * Options include choosing a playlist, making a new playlist, or importing a Spotify playlist.
+ * @returns Void.
+ */
 function mainMenu() {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
@@ -52,6 +57,12 @@ function choosePlaylistMenu(playlists) {
     });
 }
 exports.choosePlaylistMenu = choosePlaylistMenu;
+/**
+ * Displays the menu for the selected playlist and prompts the user to choose an action.
+ * Options include playing the playlist, playing a specific song, managing the playlist, and more.
+ * @param selectedPlaylist - The playlist selected by the user.
+ * @returns Void.
+ */
 function playlistMenu(selectedPlaylist) {
     console.log(`Selected playlist: ${selectedPlaylist.name}`);
     console.log("[1] Play playlist");
@@ -97,11 +108,17 @@ function playlistMenu(selectedPlaylist) {
         }
         else {
             console.log("Invalid choice. Please enter valid number (1-10).");
-            playlistMenu(selectedPlaylist); // Prompt again if choice is invalid
+            playlistMenu(selectedPlaylist);
         }
     });
 }
 exports.playlistMenu = playlistMenu;
+/**
+ * Displays the menu for creating a new playlist and prompts the user to enter a name.
+ * Checks if the entered name already exists and handles accordingly.
+ * @param playlists - The object containing all the playlists.
+ * @returns Void.
+ */
 function makePlaylistMenu(playlists) {
     types_and_constants_1.rl.question("Give the new playlist a name: ", (playlistName) => {
         if (playlists[playlistName]) {

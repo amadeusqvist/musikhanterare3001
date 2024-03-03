@@ -4,8 +4,7 @@ import { printSongsIndex } from "./helperFunctions";
 
 /**
  * Plays the first song in the playlist and prompts the user to navigate to the next song or return to the playlist menu.
- * @param selectedPlaylist - The name of the selected playlist.
- * @param songs - The array of songs in the playlist.
+ * @param selectedPlaylist - The selected playlist.
  * @returns Void.
  */
 export function playPlaylist(selectedPlaylist: Playlist): void {
@@ -21,8 +20,7 @@ export function playPlaylist(selectedPlaylist: Playlist): void {
 
 /**
  * Plays the specific song chosen by the user from the playlist and prompts the user to navigate to the next song or return to the playlist menu.
- * @param selectedPlaylistName - The name of the selected playlist.
- * @param songs - The array of songs in the playlist.
+ * @param selectedPlaylist - The selected playlist.
  * @returns Void.
  */
 export function playSpecificSong(selectedPlaylist: Playlist): void {
@@ -41,11 +39,17 @@ export function playSpecificSong(selectedPlaylist: Playlist): void {
 			playlistMenu(selectedPlaylist);
         } else {
             console.log("Invalid song number. Please try again.");
-            playSpecificSong(selectedPlaylist); // Prompt again if input is invalid
+            playSpecificSong(selectedPlaylist);
         }
     });
 }
 
+/**
+ * Plays the next song in the playlist or from the song queue and prompts the user to navigate to the next song or return to the playlist menu.
+ * @param selectedPlaylist - The selected playlist.
+ * @param playlists - The Playlist Database.
+ * @returns Void.
+ */
 export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
@@ -54,7 +58,7 @@ export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData
         console.log("Playing the next song from the song queue:");
         const currentSong = songQueue.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        songQueue.songs.shift(); // Remove the played song from the queue
+        songQueue.songs.shift(); 
     } else {
         if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
             selectedPlaylist.currentSongIndex++;
@@ -70,7 +74,7 @@ export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData
 }
 
 /**
- * Plays the previous song in the playlist.
+ * Plays the previous song in the playlist and prompts the user to navigate to the next song or return to the playlist menu.
  * @param selectedPlaylist - The selected playlist.
  * @returns Void.
  */
@@ -93,6 +97,11 @@ export function playPreviousSong(selectedPlaylist: Playlist): void {
 	playlistMenu(selectedPlaylist);
 }
 
+/**
+ * Plays a randomly selected song in the selected playlist.
+ * @param selectedPlaylist - The selected playlist.
+ * @returns Void.
+ */
 export function shuffleSong(selectedPlaylist: Playlist): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");

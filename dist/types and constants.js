@@ -26,9 +26,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.rl = exports.songQueue = exports.songData = exports.playlists = void 0;
 const helperFunctions_1 = require("./controllers/helperFunctions");
 const readline = __importStar(require("readline"));
+/**
+ * Loads the playlists from external storage and returns a Playlist Database.
+ * @returns PlaylistData - The loaded Playlist Database.
+ */
 exports.playlists = (0, helperFunctions_1.loadPlaylists)();
+/**
+ * Loads the songs from external storage and returns a Song Database.
+ * @returns SongDatabase - The loaded Song Database.
+ */
 exports.songData = (0, helperFunctions_1.loadSongs)();
+/**
+ * Represents the song queue, which is a specific playlist named "songQueue" from the Playlist Database.
+ */
 exports.songQueue = exports.playlists["songQueue"];
+/**
+ * Represents the Readline interface for handling user input.
+ */
 exports.rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

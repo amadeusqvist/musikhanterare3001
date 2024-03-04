@@ -4,106 +4,145 @@ const helperFunctions_1 = require("./controllers/helperFunctions");
 const types_and_constants_1 = require("./types and constants");
 const playControllers_1 = require("./controllers/playControllers");
 const playlistControllers_1 = require("./controllers/playlistControllers");
-describe('test search song database', () => {
-    const song1 = { title: "Money", artist: "Pink Floyd", album: "Dark side of the moon", collaborators: [] };
-    const song2 = { title: "Giant Steps", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song3 = { title: "Naima", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song4 = { title: "In 'N Out", artist: "Joe Henderson", album: "In 'N Out", collaborators: [] };
-    const song5 = { title: "So What", artist: "Miles Davis", album: "Kind Of Blue", collaborators: ["John Coltrane", "Cannonball Adderley", "Bill Evans"] };
-    const songdatabase = { songs: [song1, song2, song3, song4, song5] };
+describe('Search Song Database', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    const songDatabase = { songs: [song1, song2, song3, song4, song5] };
     const emptySongDatabase = { songs: [] };
-    test('search after pink floyd in songdatabase', () => {
-        const result = (0, helperFunctions_1.searchSongDatabase)(songdatabase, "pink floyd");
+    test('should find songs by artist "Pink Floyd"', () => {
+        const result = (0, helperFunctions_1.searchSongDatabase)(songDatabase, 'Pink Floyd');
         expect(result).toEqual([song1]);
     });
-    test('search after pink floyd in empty database', () => {
-        const result = (0, helperFunctions_1.searchSongDatabase)(emptySongDatabase, "pink floyd");
+    test('should not find songs in an empty database', () => {
+        const result = (0, helperFunctions_1.searchSongDatabase)(emptySongDatabase, 'Pink Floyd');
         expect(result).toEqual([]);
     });
-    test('search after coltrane in songdatabase, should also handle song 5 since coltrane is a collaborator', () => {
-        const result = (0, helperFunctions_1.searchSongDatabase)(songdatabase, "coltrane");
+    test('should find songs by artist "Coltrane", including the one with Coltrane as a collaborator', () => {
+        const result = (0, helperFunctions_1.searchSongDatabase)(songDatabase, 'Coltrane');
         expect(result).toEqual([song2, song3, song5]);
     });
-    test('search after song title naima in songdatabase', () => {
-        const result = (0, helperFunctions_1.searchSongDatabase)(songdatabase, "naima");
+    test('should find songs by title "Naima"', () => {
+        const result = (0, helperFunctions_1.searchSongDatabase)(songDatabase, 'Naima');
         expect(result).toEqual([song3]);
     });
-    test('search after nothing empty string in songdatabase', () => {
-        const result = (0, helperFunctions_1.searchSongDatabase)(songdatabase, "");
+    test('should return an empty array when searching with an empty string', () => {
+        const result = (0, helperFunctions_1.searchSongDatabase)(songDatabase, '');
         expect(result).toEqual([]);
     });
 });
-describe('test for loadPlaylist', () => {
-    test('try to load the playlist', () => {
+describe('Load Playlist', () => {
+    test('should load playlists', () => {
         const playlists = (0, types_and_constants_1.loadPlaylists)();
-        expect(playlists).toBeDefined;
+        expect(playlists).toBeDefined();
     });
 });
-describe('test for loadSongdata', () => {
-    test('try to load the playlist', () => {
+describe('Load Song Data', () => {
+    test('should load songs data', () => {
         const songsdata = (0, types_and_constants_1.loadSongs)();
-        expect(songsdata).toBeDefined;
+        expect(songsdata).toBeDefined();
     });
 });
-describe('test for removeSongHelper', () => {
-    const song = { title: "Money", artist: "Pink Floyd", album: "Dark side of the moon", collaborators: [] };
-    let playlist = { name: "jazz", songs: [song], currentSongIndex: -1 };
-    test('test to remove first song from a playlist', () => {
+describe('Remove Song Helper', () => {
+    const song = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    let playlist = { name: 'jazz', songs: [song], currentSongIndex: -1 };
+    test('should remove the first song from a playlist', () => {
         (0, playlistControllers_1.removeSongHelper)(playlist, 1);
         expect(playlist.songs).toEqual([]);
     });
 });
-describe('test for playPlaylist', () => {
-    const song1 = { title: "Money", artist: "Pink Floyd", album: "Dark side of the moon", collaborators: [] };
-    const song2 = { title: "Giant Steps", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song3 = { title: "Naima", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song4 = { title: "In 'N Out", artist: "Joe Henderson", album: "In 'N Out", collaborators: [] };
-    const song5 = { title: "So What", artist: "Miles Davis", album: "Kind Of Blue", collaborators: ["John Coltrane", "Cannonball Adderley", "Bill Evans"] };
-    let playlist = { name: "jazz", songs: [song1, song2, song3, song4, song5], currentSongIndex: -1 };
-    let playlistCopy = { name: "jazz", songs: [song1, song2, song3, song4, song5], currentSongIndex: -1 };
-    test('ensure that currentSongIndex is set to 0', () => {
+describe('Play Playlist', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    let playlist = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: -1 };
+    let playlistCopy = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: -1 };
+    test('should set currentSongIndex to 0', () => {
         (0, playControllers_1.playPlaylist)(playlist);
         expect(playlist.currentSongIndex).toEqual(0);
     });
-    test('ensure that all songs remain unchange', () => {
+    test('should keep all songs unchanged', () => {
         (0, playControllers_1.playPlaylist)(playlist);
         expect(playlist.songs).toEqual(playlistCopy.songs);
         expect(playlist.name).toEqual(playlistCopy.name);
     });
 });
-describe('test for playNextSong', () => {
-    const song1 = { title: "Money", artist: "Pink Floyd", album: "Dark side of the moon", collaborators: [] };
-    const song2 = { title: "Giant Steps", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song3 = { title: "Naima", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
-    const song4 = { title: "In 'N Out", artist: "Joe Henderson", album: "In 'N Out", collaborators: [] };
-    const song5 = { title: "So What", artist: "Miles Davis", album: "Kind Of Blue", collaborators: ["John Coltrane", "Cannonball Adderley", "Bill Evans"] };
-    let playlistIndex4 = { name: "jazz", songs: [song1, song2, song3, song4, song5], currentSongIndex: 4 };
-    let emptyPlaylist = { name: "jazz", songs: [], currentSongIndex: -1 };
-    let songQueue = { name: "songQueue", songs: [song1], currentSongIndex: -1 };
-    let emptySongQueue = { name: "songQueue", songs: [song1], currentSongIndex: -1 };
+describe('Play Next Song', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    let songQueue = { name: 'songQueue', songs: [song1], currentSongIndex: -1 };
+    let emptySongQueue = { name: 'songQueue', songs: [], currentSongIndex: -1 };
     let playlists = { songQueue: songQueue };
     let playlistsWithEmptyQueue = { songQueue: emptySongQueue };
-    test('test to play next song if there is song in queue', () => {
-        let playlistIndex1 = { name: "jazz", songs: [song1, song2, song3, song4, song5], currentSongIndex: 1 };
+    test('should play the next song if there is a song in the queue', () => {
+        let playlistIndex1 = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: 1 };
         (0, playControllers_1.playNextSong)(playlistIndex1, playlists);
         expect(playlists.songQueue.songs).toEqual([]);
         expect(playlistIndex1.currentSongIndex).toEqual(1);
     });
-    test('test to play next song with no song in queue', () => {
-        let playlistIndex2 = { name: "jazz", songs: [song1, song2, song3, song4, song5], currentSongIndex: 2 };
+    test('should play the next song with no song in the queue', () => {
+        let playlistIndex2 = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: 2 };
         (0, playControllers_1.playNextSong)(playlistIndex2, playlistsWithEmptyQueue);
         expect(playlistIndex2.currentSongIndex).toEqual(3);
     });
-    test('test to play next song from last song, should loop around and set currentSongIndex to 0', () => {
+    test('should play the next song from the last song, should loop around and set currentSongIndex to 0', () => {
+        let playlistIndex4 = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: 4 };
         (0, playControllers_1.playNextSong)(playlistIndex4, playlistsWithEmptyQueue);
         expect(playlistIndex4.currentSongIndex).toEqual(0);
     });
-    test('play next song on empty playlist should not change the current song index', () => {
+    test('should not change the current song index on an empty playlist', () => {
+        let emptyPlaylist = { name: 'jazz', songs: [], currentSongIndex: -1 };
         (0, playControllers_1.playNextSong)(emptyPlaylist, playlistsWithEmptyQueue);
         expect(emptyPlaylist.currentSongIndex).toEqual(-1);
     });
 });
-describe('test for shuffleSong', () => {
+describe('Shuffle Song', () => {
+    test('should keep currentSongIndex the same if shuffle is called with an empty playlist', () => {
+        let playlistIndex1 = { name: 'jazz', songs: [], currentSongIndex: 1 };
+        (0, playControllers_1.shuffleSong)(playlistIndex1);
+        expect(playlistIndex1.currentSongIndex).toEqual(1);
+    });
 });
-describe('test for playPreviousSong', () => {
+describe('Play Previous Song', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    test('should play the previous song from the first song, should loop around and set currentSongIndex to 4', () => {
+        let playlistIndex0 = { name: 'jazz', songs: [song1, song2, song3, song4, song5], currentSongIndex: 0 };
+        (0, playControllers_1.playPreviousSong)(playlistIndex0);
+        expect(playlistIndex0.currentSongIndex).toEqual(4);
+    });
+    test('should not change the current song index on an empty playlist', () => {
+        let emptyPlaylist = { name: 'jazz', songs: [], currentSongIndex: -1 };
+        (0, playControllers_1.playPreviousSong)(emptyPlaylist);
+        expect(emptyPlaylist.currentSongIndex).toEqual(-1);
+    });
+});
+describe('Add Song Helper', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    test('should add song2 to an empty playlist', () => {
+        let emptyPlaylist = { name: 'jazz', songs: [], currentSongIndex: -1 };
+        let matchingSongs = [song1, song2, song3, song4, song5];
+        (0, playlistControllers_1.addSongHelper)(emptyPlaylist, matchingSongs, 2);
+        expect(emptyPlaylist.songs).toEqual([song2]);
+    });
+    test('should add a song to the end of a playlist with songs', () => {
+        let playlistWithSongs = { name: 'jazz', songs: [song1, song2, song3], currentSongIndex: -1 };
+        let matchingSongs = [song4, song5];
+        (0, playlistControllers_1.addSongHelper)(playlistWithSongs, matchingSongs, 1);
+        expect(playlistWithSongs.songs).toEqual([song1, song2, song3, song4]);
+    });
 });

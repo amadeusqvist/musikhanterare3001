@@ -1,7 +1,7 @@
 import {rl, playlists, Playlist, PlaylistData, songData, songQueue} from './types and constants'
-import { printPlaylists, printSongs } from './controllers/helperFunctions';
+import { printPlaylists, printSongs, isValidPlaylistIndex, isPlaylistNameTaken, createNewPlaylist } from './controllers/helperFunctions';
 import { playPlaylistCallback, playNextSongCallback, playPreviousSongCallback, playSpecificSong, shuffleSongCallback} from './controllers/playControllers';
-import { addSong, removeSong, viewQueue } from './controllers/playlistControllers';
+import { addSong, removeSong, viewQueueCallback } from './controllers/playlistControllers';
 import { importPlaylist} from './spotify-api'
 
 /**
@@ -13,15 +13,20 @@ export function mainMenu(): void {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
     console.log("[3] Import Spotify playlist")
+    console.log();
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
+            console.log();
             choosePlaylistMenu(playlists);
         } else if (answer === '2') {
+            console.log();
             makePlaylistMenu(playlists);
         } else if (answer === '3') {
+            console.log();
             importPlaylist();
         } else {
             console.log("Invalid choice. Please enter 1 or 2.");
+            console.log();
             mainMenu();
         }
     });
@@ -34,20 +39,29 @@ export function mainMenu(): void {
  * @returns Void.
  */
 export function choosePlaylistMenu(playlists: PlaylistData): void {
+    const playlistNames = Object.keys(playlists);
+
+    if (playlistNames.length === 0) {
+        console.log("No playlists available.");
+        console.log();
+        return;
+    }
+
     printPlaylists(playlists);
 
     rl.question("Enter the index of the playlist you want to choose: ", (answer: string): void => {
         const index = parseInt(answer);
-        if (!isNaN(index) && index > 0 && index <= Object.keys(playlists).length) {
-            const playlistNames = Object.keys(playlists);
+
+        if (isValidPlaylistIndex(index, playlistNames.length)) {
             const selectedPlaylistKey = playlistNames[index - 1];
             const selectedPlaylist = playlists[selectedPlaylistKey];
             console.log(`Songs in playlist "${selectedPlaylist.name}":`);
+            console.log();
             printSongs(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
-
         } else {
             console.log("Invalid playlist index. Please try again.");
+            console.log();
             choosePlaylistMenu(playlists);
         }
     });
@@ -71,7 +85,7 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
     console.log("[8] View queued songs");
     console.log("[9] Shuffle");
     console.log("[10] Change playlist");
-
+    console.log();
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
             playPlaylistCallback(selectedPlaylist);
@@ -88,13 +102,14 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
         } else if (answer === '7') {
             addSong(songQueue, songData, selectedPlaylist);
         } else if (answer === '8') {
-            viewQueue(selectedPlaylist, songQueue);
+            viewQueueCallback(selectedPlaylist, songQueue);
         } else if (answer === '9') {
             shuffleSongCallback(selectedPlaylist);
         } else if (answer === '10') {
             mainMenu();
         } else {
             console.log("Invalid choice. Please enter valid number (1-10).");
+            console.log();
             playlistMenu(selectedPlaylist);
         }
     });
@@ -108,16 +123,12 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
  */
 export function makePlaylistMenu(playlists: PlaylistData): void {
     rl.question("Give the new playlist a name: ", (playlistName: string): void => {
-        if (playlists[playlistName]) {
-            console.log("Playlistname already exists");
+        if (isPlaylistNameTaken(playlistName, playlists)) {
+            console.log("Playlist name already exists.");
+            console.log();
             makePlaylistMenu(playlists);
         } else {
-            const newPlaylist: Playlist = {
-                name: playlistName,
-                songs: [],
-                currentSongIndex: -1
-            };
-            playlists[playlistName] = newPlaylist;
+            createNewPlaylist(playlistName, playlists);
             playlistMenu(playlists[playlistName]);
         }
     });

@@ -1,7 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists = exports.printSongsIndex = exports.printSongs = void 0;
+exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists = exports.printSongsIndex = exports.printSongs = exports.createNewPlaylist = exports.isPlaylistNameTaken = exports.isValidPlaylistIndex = exports.isValidSongIndex = void 0;
 const types_and_constants_1 = require("../types and constants");
+/**
+ * Checks if the provided song index is valid.
+ * @param songIndex - The index of the song.
+ * @param songs - The array of songs in the playlist.
+ * @returns Boolean indicating the validity of the song index.
+ */
+function isValidSongIndex(songIndex, songs) {
+    return !isNaN(songIndex) && songIndex > 0 && songIndex <= songs.length;
+}
+exports.isValidSongIndex = isValidSongIndex;
+/**
+ * Checks if the playlist index is valid.
+ * @param index - The playlist index entered by the user.
+ * @param totalPlaylists - The total number of playlists.
+ * @returns boolean - True if the index is valid, false otherwise.
+ */
+function isValidPlaylistIndex(index, totalPlaylists) {
+    return !isNaN(index) && index > 0 && index <= totalPlaylists;
+}
+exports.isValidPlaylistIndex = isValidPlaylistIndex;
+/**
+ * Checks if a playlist name is already taken.
+ * @param name - The name of the playlist to check.
+ * @param playlists - The object containing all the playlists.
+ * @returns boolean - True if the playlist name is taken, false otherwise.
+ */
+function isPlaylistNameTaken(name, playlists) {
+    return playlists[name] !== undefined;
+}
+exports.isPlaylistNameTaken = isPlaylistNameTaken;
+/**
+ * Creates a new playlist with the provided name and adds it to the playlists object.
+ * @param playlistName - The name of the new playlist.
+ * @param playlists - The object containing all the playlists.
+ * @returns void.
+ */
+function createNewPlaylist(playlistName, playlists) {
+    const newPlaylist = {
+        name: playlistName,
+        songs: [],
+        currentSongIndex: -1
+    };
+    playlists[playlistName] = newPlaylist;
+}
+exports.createNewPlaylist = createNewPlaylist;
 /**
  * Prints the list of songs in a playlist along with their titles and artists.
  * @param songArray - The array of songs in the playlist.
@@ -11,6 +56,7 @@ function printSongs(songArray) {
     for (let i = 0; i < songArray.length; i++) {
         console.log(`${songArray[i].title} - ${songArray[i].artist}`);
     }
+    console.log();
 }
 exports.printSongs = printSongs;
 /**
@@ -22,6 +68,7 @@ function printSongsIndex(songArray) {
     for (let i = 0; i < songArray.length; i++) {
         console.log(`[${i + 1}] ${songArray[i].title} - ${songArray[i].artist}`);
     }
+    console.log();
 }
 exports.printSongsIndex = printSongsIndex;
 /**
@@ -34,6 +81,7 @@ function printPlaylists(playlists) {
     Object.values(playlists).forEach((playlist, index) => {
         console.log(`[${index + 1}] ${playlist.name}`);
     });
+    console.log();
 }
 exports.printPlaylists = printPlaylists;
 /**
@@ -43,11 +91,11 @@ exports.printPlaylists = printPlaylists;
  * @returns Array<Song> - An array of songs matching the search criteria.
  */
 function searchSongDatabase(songDatabase, searchTerm) {
-    const matchingSongs = [];
-    const lowercaseSearchTerm = searchTerm.toLowerCase();
-    if (lowercaseSearchTerm === "") {
-        return matchingSongs;
+    const lowercaseSearchTerm = searchTerm.toLowerCase().trim();
+    if (!lowercaseSearchTerm) {
+        return [];
     }
+    const matchingSongs = [];
     for (const songId in songDatabase.songs) {
         const song = songDatabase.songs[songId];
         const lowercaseTitle = song.title.toLowerCase();
@@ -71,10 +119,11 @@ exports.searchSongDatabase = searchSongDatabase;
 function findMatchingSongs(songDatabase, callback) {
     const askQuestion = () => {
         types_and_constants_1.rl.question("Search after a song: ", (answer) => {
-            const searchTerm = answer;
+            const searchTerm = answer.trim();
             const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
             if (matchingSongs.length === 0) {
                 console.log("There were no matching songs. Please try again.");
+                console.log();
                 askQuestion();
             }
             else {

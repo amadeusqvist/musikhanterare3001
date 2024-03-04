@@ -26,6 +26,7 @@ const getToken = async () => {
         return response.data.access_token;
     } catch (error) {
         console.log('Error fetching access token:', error);
+        console.log();
         throw error;
     }
 };
@@ -79,6 +80,7 @@ const getPlaylistTracks = async (accessToken: string, playlistUri: string) => {
         if (!Array.isArray(tracks)) {
             console.error('Invalid response format. Expected an array of tracks.');
             console.log('Response:', playlistResponse.data);
+            console.log();
             return [];
         }
   
@@ -176,6 +178,7 @@ const updateSongsDbAndPlaylistsDb = (tracks: Array<any>, playlistName: string, p
   
     if (tracks.length === 0) {
         console.log('No tracks found in the playlist.');
+        console.log();
         return;
     }
   
@@ -219,6 +222,7 @@ export const importPlaylist = async () => {
             updateSongsDbAndPlaylistsDb(playlistTracks, playlistName, playlists, songData);
         } catch (error) {
             console.log('An error occurred:', error);
+            console.log();
         } finally {
             mainMenu();
         }

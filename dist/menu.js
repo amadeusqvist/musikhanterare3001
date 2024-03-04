@@ -15,18 +15,23 @@ function mainMenu() {
     console.log("[1] Choose Playlist");
     console.log("[2] Make Playlist");
     console.log("[3] Import Spotify playlist");
+    console.log();
     types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
+            console.log();
             choosePlaylistMenu(types_and_constants_1.playlists);
         }
         else if (answer === '2') {
+            console.log();
             makePlaylistMenu(types_and_constants_1.playlists);
         }
         else if (answer === '3') {
+            console.log();
             (0, spotify_api_1.importPlaylist)();
         }
         else {
             console.log("Invalid choice. Please enter 1 or 2.");
+            console.log();
             mainMenu();
         }
     });
@@ -39,19 +44,26 @@ exports.mainMenu = mainMenu;
  * @returns Void.
  */
 function choosePlaylistMenu(playlists) {
+    const playlistNames = Object.keys(playlists);
+    if (playlistNames.length === 0) {
+        console.log("No playlists available.");
+        console.log();
+        return;
+    }
     (0, helperFunctions_1.printPlaylists)(playlists);
     types_and_constants_1.rl.question("Enter the index of the playlist you want to choose: ", (answer) => {
         const index = parseInt(answer);
-        if (!isNaN(index) && index > 0 && index <= Object.keys(playlists).length) {
-            const playlistNames = Object.keys(playlists);
+        if ((0, helperFunctions_1.isValidPlaylistIndex)(index, playlistNames.length)) {
             const selectedPlaylistKey = playlistNames[index - 1];
             const selectedPlaylist = playlists[selectedPlaylistKey];
             console.log(`Songs in playlist "${selectedPlaylist.name}":`);
+            console.log();
             (0, helperFunctions_1.printSongs)(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
         }
         else {
             console.log("Invalid playlist index. Please try again.");
+            console.log();
             choosePlaylistMenu(playlists);
         }
     });
@@ -75,6 +87,7 @@ function playlistMenu(selectedPlaylist) {
     console.log("[8] View queued songs");
     console.log("[9] Shuffle");
     console.log("[10] Change playlist");
+    console.log();
     types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
             (0, playControllers_1.playPlaylistCallback)(selectedPlaylist);
@@ -98,7 +111,7 @@ function playlistMenu(selectedPlaylist) {
             (0, playlistControllers_1.addSong)(types_and_constants_1.songQueue, types_and_constants_1.songData, selectedPlaylist);
         }
         else if (answer === '8') {
-            (0, playlistControllers_1.viewQueue)(selectedPlaylist, types_and_constants_1.songQueue);
+            (0, playlistControllers_1.viewQueueCallback)(selectedPlaylist, types_and_constants_1.songQueue);
         }
         else if (answer === '9') {
             (0, playControllers_1.shuffleSongCallback)(selectedPlaylist);
@@ -108,6 +121,7 @@ function playlistMenu(selectedPlaylist) {
         }
         else {
             console.log("Invalid choice. Please enter valid number (1-10).");
+            console.log();
             playlistMenu(selectedPlaylist);
         }
     });
@@ -121,17 +135,13 @@ exports.playlistMenu = playlistMenu;
  */
 function makePlaylistMenu(playlists) {
     types_and_constants_1.rl.question("Give the new playlist a name: ", (playlistName) => {
-        if (playlists[playlistName]) {
-            console.log("Playlistname already exists");
+        if ((0, helperFunctions_1.isPlaylistNameTaken)(playlistName, playlists)) {
+            console.log("Playlist name already exists.");
+            console.log();
             makePlaylistMenu(playlists);
         }
         else {
-            const newPlaylist = {
-                name: playlistName,
-                songs: [],
-                currentSongIndex: -1
-            };
-            playlists[playlistName] = newPlaylist;
+            (0, helperFunctions_1.createNewPlaylist)(playlistName, playlists);
             playlistMenu(playlists[playlistName]);
         }
     });

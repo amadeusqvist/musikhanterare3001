@@ -10,14 +10,16 @@ const helperFunctions_1 = require("./helperFunctions");
  * @returns Void.
  */
 function playPlaylist(selectedPlaylist) {
-    if (selectedPlaylist.songs.length === 0) {
+    const { songs } = selectedPlaylist;
+    if (songs.length === 0) {
         console.log("Playlist is empty.");
+        console.log();
+        return;
     }
-    else {
-        const currentSong = selectedPlaylist.songs[0];
-        console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        selectedPlaylist.currentSongIndex = 0;
-    }
+    const currentSong = songs[0];
+    console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+    console.log();
+    selectedPlaylist.currentSongIndex = 0;
 }
 exports.playPlaylist = playPlaylist;
 function playPlaylistCallback(selectedPlaylist) {
@@ -31,21 +33,26 @@ exports.playPlaylistCallback = playPlaylistCallback;
  * @returns Void.
  */
 function playSpecificSong(selectedPlaylist) {
-    if (selectedPlaylist.songs.length === 0) {
+    const { songs } = selectedPlaylist;
+    if (songs.length === 0) {
         console.log("Playlist is empty.");
+        console.log();
         (0, menu_1.playlistMenu)(selectedPlaylist);
+        return;
     }
-    (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
+    (0, helperFunctions_1.printSongsIndex)(songs);
     types_and_constants_1.rl.question("Enter the number of the song you wish to play: ", (answer) => {
         const songIndex = parseInt(answer);
-        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
-            const currentSong = selectedPlaylist.songs[songIndex - 1];
+        if ((0, helperFunctions_1.isValidSongIndex)(songIndex, songs)) {
+            const currentSong = songs[songIndex - 1];
             console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+            console.log();
             selectedPlaylist.currentSongIndex = songIndex - 1;
             (0, menu_1.playlistMenu)(selectedPlaylist);
         }
         else {
             console.log("Invalid song number. Please try again.");
+            console.log();
             playSpecificSong(selectedPlaylist);
         }
     });
@@ -58,27 +65,26 @@ exports.playSpecificSong = playSpecificSong;
  * @returns Void.
  */
 function playNextSong(selectedPlaylist, playlists) {
-    if (selectedPlaylist.songs.length === 0) {
-        console.log("Playlist is empty.");
-    }
-    else if (playlists.songQueue.songs.length > 0) {
+    const { songs, currentSongIndex } = selectedPlaylist;
+    const { songQueue } = playlists;
+    if (songQueue.songs.length > 0) {
         console.log("Playing the next song from the song queue:");
-        const currentSong = playlists.songQueue.songs[0];
+        console.log();
+        const currentSong = songQueue.songs[0];
+        songQueue.songs.shift();
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        playlists.songQueue.songs.shift();
+        console.log();
+    }
+    else if (songs.length === 0) {
+        console.log("Playlist is empty.");
+        console.log();
     }
     else {
-        if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
-            const currentSongIndex = selectedPlaylist.currentSongIndex;
-            selectedPlaylist.currentSongIndex = currentSongIndex + 1;
-            const currentSong = selectedPlaylist.songs[selectedPlaylist.currentSongIndex];
-            console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        }
-        else {
-            selectedPlaylist.currentSongIndex = 0;
-            const currentSong = selectedPlaylist.songs[0];
-            console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        }
+        const newIndex = currentSongIndex < songs.length - 1 ? currentSongIndex + 1 : 0;
+        selectedPlaylist.currentSongIndex = newIndex;
+        const currentSong = songs[newIndex];
+        console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+        console.log();
     }
 }
 exports.playNextSong = playNextSong;
@@ -93,24 +99,28 @@ exports.playNextSongCallback = playNextSongCallback;
  * @returns Void.
  */
 function playPreviousSong(selectedPlaylist) {
-    if (selectedPlaylist.songs.length === 0) {
-        console.log("Playlist is empty");
+    const { songs, currentSongIndex } = selectedPlaylist;
+    if (songs.length === 0) {
+        console.log("Playlist is empty.");
+        console.log();
+        return;
     }
-    else if (selectedPlaylist.currentSongIndex === -1) {
-        console.log("No song currently playing.");
+    if (currentSongIndex === -1) {
+        console.log("Play a song in this playlist first.");
+        console.log();
+        return;
     }
-    else if (selectedPlaylist.currentSongIndex === 0) {
-        const currentIndex = selectedPlaylist.songs.length - 1;
-        const currentSong = selectedPlaylist.songs[currentIndex];
-        console.log(`Now playing ${currentSong.title} - ${currentSong.artist}`);
-        selectedPlaylist.currentSongIndex = currentIndex;
+    let newIndex;
+    if (currentSongIndex === 0) {
+        newIndex = songs.length - 1;
     }
     else {
-        const currentIndex = selectedPlaylist.currentSongIndex - 1;
-        const previousSong = selectedPlaylist.songs[currentIndex];
-        console.log(`Now playing: ${previousSong.title} - ${previousSong.artist}`);
-        selectedPlaylist.currentSongIndex = currentIndex;
+        newIndex = currentSongIndex - 1;
     }
+    const previousSong = songs[newIndex];
+    console.log(`Now playing: ${previousSong.title} - ${previousSong.artist}`);
+    console.log();
+    selectedPlaylist.currentSongIndex = newIndex;
 }
 exports.playPreviousSong = playPreviousSong;
 function playPreviousSongCallback(selectedPlaylist) {
@@ -124,15 +134,17 @@ exports.playPreviousSongCallback = playPreviousSongCallback;
  * @returns Void.
  */
 function shuffleSong(selectedPlaylist) {
-    if (selectedPlaylist.songs.length === 0) {
+    const { songs } = selectedPlaylist;
+    if (songs.length === 0) {
         console.log("Playlist is empty.");
+        console.log();
+        return;
     }
-    else {
-        const songs = selectedPlaylist.songs;
-        const random_index = Math.floor(Math.random() * songs.length);
-        const currentSong = selectedPlaylist.songs[random_index];
-        console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-    }
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    selectedPlaylist.currentSongIndex = randomIndex;
+    const currentSong = songs[randomIndex];
+    console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
+    console.log();
 }
 exports.shuffleSong = shuffleSong;
 function shuffleSongCallback(selectedPlaylist) {

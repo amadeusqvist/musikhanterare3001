@@ -38,6 +38,7 @@ const getToken = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log('Error fetching access token:', error);
+        console.log();
         throw error;
     }
 });
@@ -86,6 +87,7 @@ const getPlaylistTracks = (accessToken, playlistUri) => __awaiter(void 0, void 0
         if (!Array.isArray(tracks)) {
             console.error('Invalid response format. Expected an array of tracks.');
             console.log('Response:', playlistResponse.data);
+            console.log();
             return [];
         }
         return tracks;
@@ -171,6 +173,7 @@ const updateSongsDbAndPlaylistsDb = (tracks, playlistName, playlists, songDataba
     }
     if (tracks.length === 0) {
         console.log('No tracks found in the playlist.');
+        console.log();
         return;
     }
     tracks.forEach((track) => {
@@ -209,6 +212,7 @@ const importPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         catch (error) {
             console.log('An error occurred:', error);
+            console.log();
         }
         finally {
             (0, menu_1.mainMenu)();

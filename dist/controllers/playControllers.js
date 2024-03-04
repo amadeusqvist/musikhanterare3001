@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shuffleSong = exports.playPreviousSong = exports.playNextSong = exports.playSpecificSong = exports.playPlaylist = void 0;
+exports.shuffleSongCallback = exports.shuffleSong = exports.playPreviousSongCallback = exports.playPreviousSong = exports.playNextSongCallback = exports.playNextSong = exports.playSpecificSong = exports.playPlaylistCallback = exports.playPlaylist = void 0;
 const types_and_constants_1 = require("../types and constants");
 const menu_1 = require("../menu");
 const helperFunctions_1 = require("./helperFunctions");
@@ -18,9 +18,13 @@ function playPlaylist(selectedPlaylist) {
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         selectedPlaylist.currentSongIndex = 0;
     }
-    (0, menu_1.playlistMenu)(selectedPlaylist);
 }
 exports.playPlaylist = playPlaylist;
+function playPlaylistCallback(selectedPlaylist) {
+    playPlaylist(selectedPlaylist);
+    (0, menu_1.playlistMenu)(selectedPlaylist);
+}
+exports.playPlaylistCallback = playPlaylistCallback;
 /**
  * Plays the specific song chosen by the user from the playlist and prompts the user to navigate to the next song or return to the playlist menu.
  * @param selectedPlaylist - The selected playlist.
@@ -56,17 +60,17 @@ exports.playSpecificSong = playSpecificSong;
 function playNextSong(selectedPlaylist, playlists) {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
-        (0, menu_1.playlistMenu)(selectedPlaylist);
     }
-    else if (types_and_constants_1.songQueue.songs.length > 0) {
+    else if (playlists.songQueue.songs.length > 0) {
         console.log("Playing the next song from the song queue:");
-        const currentSong = types_and_constants_1.songQueue.songs[0];
+        const currentSong = playlists.songQueue.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        types_and_constants_1.songQueue.songs.shift();
+        playlists.songQueue.songs.shift();
     }
     else {
         if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
-            selectedPlaylist.currentSongIndex++;
+            const currentSongIndex = selectedPlaylist.currentSongIndex;
+            selectedPlaylist.currentSongIndex = currentSongIndex + 1;
             const currentSong = selectedPlaylist.songs[selectedPlaylist.currentSongIndex];
             console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         }
@@ -76,9 +80,13 @@ function playNextSong(selectedPlaylist, playlists) {
             console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         }
     }
-    (0, menu_1.playlistMenu)(selectedPlaylist);
 }
 exports.playNextSong = playNextSong;
+function playNextSongCallback(selectedPlaylist, playlists) {
+    playNextSong(selectedPlaylist, playlists);
+    (0, menu_1.playlistMenu)(selectedPlaylist);
+}
+exports.playNextSongCallback = playNextSongCallback;
 /**
  * Plays the previous song in the playlist and prompts the user to navigate to the next song or return to the playlist menu.
  * @param selectedPlaylist - The selected playlist.
@@ -103,9 +111,13 @@ function playPreviousSong(selectedPlaylist) {
         console.log(`Now playing: ${previousSong.title} - ${previousSong.artist}`);
         selectedPlaylist.currentSongIndex = currentIndex;
     }
-    (0, menu_1.playlistMenu)(selectedPlaylist);
 }
 exports.playPreviousSong = playPreviousSong;
+function playPreviousSongCallback(selectedPlaylist) {
+    playPreviousSong(selectedPlaylist);
+    (0, menu_1.playlistMenu)(selectedPlaylist);
+}
+exports.playPreviousSongCallback = playPreviousSongCallback;
 /**
  * Plays a randomly selected song in the selected playlist.
  * @param selectedPlaylist - The selected playlist.
@@ -121,6 +133,10 @@ function shuffleSong(selectedPlaylist) {
         const currentSong = selectedPlaylist.songs[random_index];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
     }
-    (0, menu_1.playlistMenu)(selectedPlaylist);
 }
 exports.shuffleSong = shuffleSong;
+function shuffleSongCallback(selectedPlaylist) {
+    shuffleSong(selectedPlaylist);
+    (0, menu_1.playlistMenu)(selectedPlaylist);
+}
+exports.shuffleSongCallback = shuffleSongCallback;

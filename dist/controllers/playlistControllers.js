@@ -70,7 +70,6 @@ function removeSongHelper(selectedPlaylist, songIndex) {
         if (selectedPlaylist.currentSongIndex >= songIndex) {
             selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
         }
-        (0, menu_1.playlistMenu)(selectedPlaylist);
     }
     else {
         console.log("Invalid choice.");
@@ -78,6 +77,10 @@ function removeSongHelper(selectedPlaylist, songIndex) {
     }
 }
 exports.removeSongHelper = removeSongHelper;
+function removeSongHelperCallback(selectedPlaylist, songIndex) {
+    removeSongHelper(selectedPlaylist, songIndex);
+    (0, menu_1.playlistMenu)(selectedPlaylist);
+}
 /**
  * Prompts the user to select a song to remove from the playlist and removes the selected song.
  * @param selectedPlaylist - The selected playlist.
@@ -93,7 +96,7 @@ function removeSong(selectedPlaylist) {
         (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
         types_and_constants_1.rl.question("Enter the index of the song you want to remove: ", (answer) => {
             const songIndex = parseInt(answer);
-            removeSongHelper(selectedPlaylist, songIndex);
+            removeSongHelperCallback(selectedPlaylist, songIndex);
         });
     }
 }

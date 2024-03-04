@@ -77,16 +77,16 @@ function playlistMenu(selectedPlaylist) {
     console.log("[10] Change playlist");
     types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
-            (0, playControllers_1.playPlaylist)(selectedPlaylist);
+            (0, playControllers_1.playPlaylistCallback)(selectedPlaylist);
         }
         else if (answer === '2') {
             (0, playControllers_1.playSpecificSong)(selectedPlaylist);
         }
         else if (answer === '3') {
-            (0, playControllers_1.playNextSong)(selectedPlaylist, types_and_constants_1.playlists);
+            (0, playControllers_1.playNextSongCallback)(selectedPlaylist, types_and_constants_1.playlists);
         }
         else if (answer === '4') {
-            (0, playControllers_1.playPreviousSong)(selectedPlaylist);
+            (0, playControllers_1.playPreviousSongCallback)(selectedPlaylist);
         }
         else if (answer === '5') {
             (0, playlistControllers_1.addSong)(selectedPlaylist, types_and_constants_1.songData, selectedPlaylist);
@@ -101,7 +101,7 @@ function playlistMenu(selectedPlaylist) {
             (0, playlistControllers_1.viewQueue)(selectedPlaylist, types_and_constants_1.songQueue);
         }
         else if (answer === '9') {
-            (0, playControllers_1.shuffleSong)(selectedPlaylist);
+            (0, playControllers_1.shuffleSongCallback)(selectedPlaylist);
         }
         else if (answer === '10') {
             mainMenu();

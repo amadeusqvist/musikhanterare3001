@@ -15,7 +15,11 @@ export function playPlaylist(selectedPlaylist: Playlist): void {
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         selectedPlaylist.currentSongIndex = 0;
     }
-	playlistMenu(selectedPlaylist);
+}
+
+export function playPlaylistCallback(selectedPlaylist: Playlist): void {
+    playPlaylist(selectedPlaylist);
+    playlistMenu(selectedPlaylist);
 }
 
 /**
@@ -53,15 +57,15 @@ export function playSpecificSong(selectedPlaylist: Playlist): void {
 export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData): void {
     if (selectedPlaylist.songs.length === 0) {
         console.log("Playlist is empty.");
-        playlistMenu(selectedPlaylist);    
-    } else if (songQueue.songs.length > 0) {
+    } else if (playlists.songQueue.songs.length > 0) {
         console.log("Playing the next song from the song queue:");
-        const currentSong = songQueue.songs[0];
+        const currentSong = playlists.songQueue.songs[0];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
-        songQueue.songs.shift(); 
+        playlists.songQueue.songs.shift(); 
     } else {
         if (selectedPlaylist.currentSongIndex < selectedPlaylist.songs.length - 1) {
-            selectedPlaylist.currentSongIndex++;
+            const currentSongIndex = selectedPlaylist.currentSongIndex;
+            selectedPlaylist.currentSongIndex = currentSongIndex + 1;
             const currentSong = selectedPlaylist.songs[selectedPlaylist.currentSongIndex];
             console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         } else {
@@ -70,7 +74,11 @@ export function playNextSong(selectedPlaylist: Playlist, playlists: PlaylistData
             console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
         }
     }
-    playlistMenu(selectedPlaylist);
+}
+
+export function playNextSongCallback(selectedPlaylist: Playlist, playlists: PlaylistData): void {
+    playNextSong(selectedPlaylist, playlists);
+    playlistMenu(selectedPlaylist)
 }
 
 /**
@@ -94,7 +102,11 @@ export function playPreviousSong(selectedPlaylist: Playlist): void {
         console.log(`Now playing: ${previousSong.title} - ${previousSong.artist}`);
         selectedPlaylist.currentSongIndex = currentIndex;
     }
-	playlistMenu(selectedPlaylist);
+}
+
+export function playPreviousSongCallback(selectedPlaylist: Playlist): void {
+	playPreviousSong(selectedPlaylist);
+    playlistMenu(selectedPlaylist);
 }
 
 /**
@@ -111,5 +123,10 @@ export function shuffleSong(selectedPlaylist: Playlist): void {
         const currentSong = selectedPlaylist.songs[random_index];
         console.log(`Now playing: ${currentSong.title} - ${currentSong.artist}`);
     }
+}
+
+export function shuffleSongCallback(selectedPlaylist: Playlist) {
+    shuffleSong(selectedPlaylist);
     playlistMenu(selectedPlaylist);
 }
+

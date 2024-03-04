@@ -68,11 +68,15 @@ export function removeSongHelper(selectedPlaylist: Playlist, songIndex: number):
         if (selectedPlaylist.currentSongIndex >= songIndex) {
             selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
         }
-        playlistMenu(selectedPlaylist);
     } else {
         console.log("Invalid choice.")
         removeSongHelper(selectedPlaylist, songIndex);
     }
+}
+
+function removeSongHelperCallback(selectedPlaylist: Playlist, songIndex: number): void {
+    removeSongHelper(selectedPlaylist, songIndex);
+    playlistMenu(selectedPlaylist)
 }
 
 /**
@@ -89,7 +93,7 @@ export function removeSong(selectedPlaylist: Playlist): void {
         printSongsIndex(selectedPlaylist.songs);
         rl.question("Enter the index of the song you want to remove: ", (answer: string): void => {
             const songIndex = parseInt(answer);
-            removeSongHelper(selectedPlaylist, songIndex);
+            removeSongHelperCallback(selectedPlaylist, songIndex);
         });
     }
 }

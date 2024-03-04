@@ -1,6 +1,6 @@
 import {rl, playlists, Playlist, PlaylistData, songData, songQueue} from './types and constants'
 import { printPlaylists, printSongs } from './controllers/helperFunctions';
-import { playPlaylist, playNextSong, playPreviousSong, playSpecificSong, shuffleSong} from './controllers/playControllers';
+import { playPlaylistCallback, playNextSongCallback, playPreviousSongCallback, playSpecificSong, shuffleSongCallback} from './controllers/playControllers';
 import { addSong, removeSong, viewQueue } from './controllers/playlistControllers';
 import { importPlaylist} from './spotify-api'
 
@@ -74,13 +74,13 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
 
     rl.question("Enter your choice: ", (answer: string): void => {
         if (answer === '1') {
-            playPlaylist(selectedPlaylist);
+            playPlaylistCallback(selectedPlaylist);
         } else if (answer === '2') {
             playSpecificSong(selectedPlaylist);
         } else if (answer === '3') {
-            playNextSong(selectedPlaylist, playlists);
+            playNextSongCallback(selectedPlaylist, playlists);
         } else if (answer === '4') {
-            playPreviousSong(selectedPlaylist);
+            playPreviousSongCallback(selectedPlaylist);
         } else if (answer === '5') {
             addSong(selectedPlaylist, songData, selectedPlaylist);
         } else if (answer === '6') {
@@ -90,7 +90,7 @@ export function playlistMenu(selectedPlaylist: Playlist): void {
         } else if (answer === '8') {
             viewQueue(selectedPlaylist, songQueue);
         } else if (answer === '9') {
-            shuffleSong(selectedPlaylist);
+            shuffleSongCallback(selectedPlaylist);
         } else if (answer === '10') {
             mainMenu();
         } else {

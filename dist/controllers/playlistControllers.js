@@ -64,21 +64,18 @@ exports.addSong = addSong;
  * @param selectedPlaylist - The selected playlist.
  * @returns Void.
  */
-function removeSongHelper(selectedPlaylist) {
-    types_and_constants_1.rl.question("Enter the index of the song you want to remove: ", (answer) => {
-        const songIndex = parseInt(answer);
-        if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
-            selectedPlaylist.songs.splice(songIndex - 1, 1);
-            if (selectedPlaylist.currentSongIndex >= songIndex) {
-                selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
-            }
-            (0, menu_1.playlistMenu)(selectedPlaylist);
+function removeSongHelper(selectedPlaylist, songIndex) {
+    if (!isNaN(songIndex) && songIndex > 0 && songIndex <= selectedPlaylist.songs.length) {
+        selectedPlaylist.songs.splice(songIndex - 1, 1);
+        if (selectedPlaylist.currentSongIndex >= songIndex) {
+            selectedPlaylist.currentSongIndex = Math.max(selectedPlaylist.currentSongIndex - 1, 0);
         }
-        else {
-            console.log("Invalid choice.");
-            removeSongHelper(selectedPlaylist);
-        }
-    });
+        (0, menu_1.playlistMenu)(selectedPlaylist);
+    }
+    else {
+        console.log("Invalid choice.");
+        removeSongHelper(selectedPlaylist, songIndex);
+    }
 }
 exports.removeSongHelper = removeSongHelper;
 /**
@@ -94,7 +91,10 @@ function removeSong(selectedPlaylist) {
     else {
         console.log(`Songs in playlist ${selectedPlaylist.name}:`);
         (0, helperFunctions_1.printSongsIndex)(selectedPlaylist.songs);
-        removeSongHelper(selectedPlaylist);
+        types_and_constants_1.rl.question("Enter the index of the song you want to remove: ", (answer) => {
+            const songIndex = parseInt(answer);
+            removeSongHelper(selectedPlaylist, songIndex);
+        });
     }
 }
 exports.removeSong = removeSong;

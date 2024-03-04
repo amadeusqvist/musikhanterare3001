@@ -23,19 +23,54 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rl = exports.songQueue = exports.songData = exports.playlists = void 0;
-const helperFunctions_1 = require("./controllers/helperFunctions");
+exports.rl = exports.songQueue = exports.songData = exports.playlists = exports.loadPlaylists = exports.loadSongs = void 0;
 const readline = __importStar(require("readline"));
+const path = __importStar(require("path"));
+const fs = __importStar(require("fs"));
+// Define paths to the playlistdb.json and songsdb.json
+const dataFolderPath = path.join(__dirname, '..', 'data');
+const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
+const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
+/**
+ * Loads songs from the JSON file specified in the songsDbPath and returns a Song Database.
+ * @returns SongDatabase - The loaded Song Database.
+ */
+function loadSongs() {
+    try {
+        const data = fs.readFileSync(songsDbPath, 'utf8');
+        return JSON.parse(data);
+    }
+    catch (error) {
+        console.error('Error loading songs:', error);
+        return { songs: [] };
+    }
+}
+exports.loadSongs = loadSongs;
+/**
+ * Loads playlists from the JSON file specified in the playlistsDbPath and returns a Playlist Database.
+ * @returns PlaylistData - The loaded Playlist Database.
+ */
+function loadPlaylists() {
+    try {
+        const data = fs.readFileSync(playlistsDbPath, 'utf8');
+        return JSON.parse(data);
+    }
+    catch (error) {
+        console.error('Error loading playlists:', error);
+        return {};
+    }
+}
+exports.loadPlaylists = loadPlaylists;
 /**
  * Loads the playlists from external storage and returns a Playlist Database.
  * @returns PlaylistData - The loaded Playlist Database.
  */
-exports.playlists = (0, helperFunctions_1.loadPlaylists)();
+exports.playlists = loadPlaylists();
 /**
  * Loads the songs from external storage and returns a Song Database.
  * @returns SongDatabase - The loaded Song Database.
  */
-exports.songData = (0, helperFunctions_1.loadSongs)();
+exports.songData = loadSongs();
 /**
  * Represents the song queue, which is a specific playlist named "songQueue" from the Playlist Database.
  */

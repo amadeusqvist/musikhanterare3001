@@ -1,66 +1,7 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists = exports.printSongsIndex = exports.printSongs = exports.loadPlaylists = exports.loadSongs = void 0;
+exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists = exports.printSongsIndex = exports.printSongs = void 0;
 const types_and_constants_1 = require("../types and constants");
-const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
-// Define paths to the playlistdb.json and songsdb.json
-const dataFolderPath = path.join(__dirname, '..', '..', 'data');
-const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
-const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
-/**
- * Loads songs from the JSON file specified in the songsDbPath and returns a Song Database.
- * @returns SongDatabase - The loaded Song Database.
- */
-function loadSongs() {
-    try {
-        const data = fs.readFileSync(songsDbPath, 'utf8');
-        return JSON.parse(data);
-    }
-    catch (error) {
-        console.error('Error loading songs:', error);
-        return { songs: [] };
-    }
-}
-exports.loadSongs = loadSongs;
-/**
- * Loads playlists from the JSON file specified in the playlistsDbPath and returns a Playlist Database.
- * @returns PlaylistData - The loaded Playlist Database.
- */
-function loadPlaylists() {
-    try {
-        const data = fs.readFileSync(playlistsDbPath, 'utf8');
-        return JSON.parse(data);
-    }
-    catch (error) {
-        console.error('Error loading playlists:', error);
-        return {};
-    }
-}
-exports.loadPlaylists = loadPlaylists;
 /**
  * Prints the list of songs in a playlist along with their titles and artists.
  * @param songArray - The array of songs in the playlist.
@@ -104,6 +45,9 @@ exports.printPlaylists = printPlaylists;
 function searchSongDatabase(songDatabase, searchTerm) {
     const matchingSongs = [];
     const lowercaseSearchTerm = searchTerm.toLowerCase();
+    if (lowercaseSearchTerm === "") {
+        return matchingSongs;
+    }
     for (const songId in songDatabase.songs) {
         const song = songDatabase.songs[songId];
         const lowercaseTitle = song.title.toLowerCase();

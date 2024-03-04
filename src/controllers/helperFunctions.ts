@@ -2,39 +2,6 @@ import { SongDatabase, PlaylistData, Song, rl } from "../types and constants";
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Define paths to the playlistdb.json and songsdb.json
-const dataFolderPath = path.join(__dirname, '..', '..', 'data');
-const playlistsDbPath = path.join(dataFolderPath, 'playlistsdb.json');
-const songsDbPath = path.join(dataFolderPath, 'songsdb.json');
-
-/**
- * Loads songs from the JSON file specified in the songsDbPath and returns a Song Database.
- * @returns SongDatabase - The loaded Song Database.
- */
-export function loadSongs(): SongDatabase {
-    try {
-        const data = fs.readFileSync(songsDbPath, 'utf8');
-        return JSON.parse(data) as SongDatabase;
-    } catch (error) {
-        console.error('Error loading songs:', error);
-        return { songs: [] };
-    }
-}
-
-/**
- * Loads playlists from the JSON file specified in the playlistsDbPath and returns a Playlist Database.
- * @returns PlaylistData - The loaded Playlist Database.
- */
-export function loadPlaylists(): PlaylistData {
-	try {
-		const data = fs.readFileSync(playlistsDbPath, 'utf8');
-		return JSON.parse(data) as PlaylistData;
-	} catch (error) {
-		console.error('Error loading playlists:', error);
-		return {};
-	}
-}
-
 /**
  * Prints the list of songs in a playlist along with their titles and artists.
  * @param songArray - The array of songs in the playlist.
@@ -78,6 +45,10 @@ export function printPlaylists(playlists: PlaylistData): void {
 export function searchSongDatabase(songDatabase: SongDatabase, searchTerm: string): Array<Song> {
     const matchingSongs: Array<Song> = [];
     const lowercaseSearchTerm = searchTerm.toLowerCase();
+
+    if (lowercaseSearchTerm === "") {
+        return matchingSongs;
+    }
 
     for (const songId in songDatabase.songs) {
         const song = songDatabase.songs[songId];

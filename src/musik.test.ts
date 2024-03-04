@@ -1,53 +1,39 @@
-import { mainMenu } from './menu';
-const readline = require('readline');
+import {searchSongDatabase} from './controllers/helperFunctions'
+import {type Song, type SongDatabase} from './types and constants'
 
-jest.mock('readline', () => ({
-    createInterface: jest.fn(() => ({
-        question: jest.fn()
-    }))
-}));
+describe('search song database', () => {
+    const song1: Song = { title: "Money", artist: "Pink Floyd", album: "Dark side of the moon", collaborators: [] };
+    const song2: Song = { title: "Giant Steps", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
+    const song3: Song = { title: "Naima", artist: "John Coltrane", album: "Giant Steps", collaborators: [] };
+    const song4: Song = { title: "In 'N Out", artist: "Joe Henderson", album: "In 'N Out", collaborators: [] };
+    const song5: Song = { title: "So What", artist: "Miles Davis", album: "Kind Of Blue", collaborators: ["John Coltrane", "Cannonball Adderley", "Bill Evans"] };
 
-describe('Main Menu', () => {
-    let consoleLogMock: jest.SpyInstance;
-
-    beforeEach(() => {
-        consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+    const songdatabase: SongDatabase = {songs: [song1, song2, song3, song4, song5]};
+    const emptySongDatabase: SongDatabase = {songs: []};
+    
+    test('search after pink floyd in songdatabase', () => {
+        const result = searchSongDatabase(songdatabase, "pink floyd")
+        expect(result).toEqual([song1])
     });
 
-    afterEach(() => {
-        consoleLogMock.mockRestore();
+    test('search after pink floyd in empty database', () => {
+        const result = searchSongDatabase(emptySongDatabase, "pink floyd")
+        expect(result).toEqual([])
     });
 
-    it('displays options correctly', () => {
-        mainMenu();
-        expect(consoleLogMock).toHaveBeenCalledWith('[1] Choose Playlist');
-        expect(consoleLogMock).toHaveBeenCalledWith('[2] Make Playlist');
-        expect(consoleLogMock).toHaveBeenCalledWith('[3] Import Spotify playlist');
+    test('search after coltrane in songdatabase, should also handle song 5 since coltrane is a collaborator', () => {
+        const result = searchSongDatabase(songdatabase, "coltrane")
+        expect(result).toEqual([song2, song3, song5])
     });
 
-    it('handles invalid input choices', () => {
-        // Mock readline interface
-        const mockInterface = {
-            question: jest.fn()
-        };
-
-        // Mock readline.createInterface to return the mock interface
-        jest.spyOn(readline, 'createInterface').mockReturnValue(mockInterface);
-
-        // Mock readline.question implementation
-        mockInterface.question.mockImplementationOnce((question, callback) => {
-            // Simulate invalid input choice
-            callback('5');
-        });
-
-        // Mock console.error to check if the error message is logged
-        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-        // Call mainMenu
-        mainMenu();
-
-        // Expect console.error to be called with the appropriate error message
-        expect(consoleErrorMock).toHaveBeenCalledWith('Invalid input. Please try again.');
+    test('search after song title naima in songdatabase', () => {
+        const result = searchSongDatabase(songdatabase, "naima")
+        expect(result).toEqual([song3])
     });
 
+    test('search after nothing empty string in songdatabase', () => {
+        const result = searchSongDatabase(songdatabase, "")
+        expect(result).toEqual([])
+    });
 });
+

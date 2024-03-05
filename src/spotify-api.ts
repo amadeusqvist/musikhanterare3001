@@ -94,63 +94,48 @@ const getPlaylistTracks = async (accessToken: string, playlistUri: string) => {
 /**
  * Extracts featured artists from a track object.
  * @param track - The track object.
- * @returns Array<string> - An array of featured artists.
+ * @returns - An array of featured artists.
  */
-const extractFeaturedArtists = (track: any) => {
-    const featuredArtists: Array<string> = track.track.artists.slice(1).map((artist: any) => artist.name);
-    return featuredArtists;
+const extractFeaturedArtists = (track: any): Array<string> => {
+    return track.track.artists.slice(1).map((artist: any) => artist.name);
+};
+
+/**
+ * Creates a Song object based on track details.
+ * @param trackName - The name of the track.
+ * @param artistName - The name of the artist.
+ * @param albumName - The name of the album.
+ * @param featuredArtists - An array of featured artists.
+ * @returns - The Song object.
+ */
+export const createSong = (trackName: string, artistName: string, albumName: string, featuredArtists: Array<string>): Song => {
+    return {
+        title: trackName,
+        artist: artistName,
+        album: albumName,
+        collaborators: featuredArtists || [],
+    };
 };
 
 /**
  * Adds a track to the Song Database.
- * @param trackName - The name of the track.
- * @param artistName - The name of the artist.
- * @param albumName - The name of the album.
- * @param featuredArtists - An array of featured artists.
+ * @param song - A song.
  * @param songDatabase - The Song Database object.
- * @returns void.
+ * @returns Void.
  */
-function addTrackToSongDb(trackName: string, artistName: string, albumName: string, featuredArtists: Array<string>, songDatabase: SongDatabase) {
-    const allFeaturedArtists: Array<string> = [];
-
-    if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
-        allFeaturedArtists.push(...featuredArtists);
-    }
-
-    const song: Song = {
-        title: trackName,
-        artist: artistName,
-        album:  albumName,
-        collaborators: allFeaturedArtists
-    };
-
-    songDatabase.songs.push(song);        
-}
+export const addTrackToSongDb = (song: Song, songDatabase: SongDatabase): void => {
+    songDatabase.songs.push(song);
+};
 
 /**
  * Adds a track to a playlist in the Playlist Database.
  * @param playlistName - The name of the playlist.
- * @param trackName - The name of the track.
- * @param artistName - The name of the artist.
- * @param albumName - The name of the album.
- * @param featuredArtists - An array of featured artists.
+ * @param song - A song.
  * @param playlists - The Playlist Database object.
- * @returns void.
+ * @returns Void.
  */
-function addTrackToPlaylist(playlistName: string, trackName: string, artistName: string, albumName: string, featuredArtists: Array<string>, playlists: PlaylistData) {
-    const allFeaturedArtists: Array<string> = [];
-  
-    if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
-        allFeaturedArtists.push(...featuredArtists);
-    }
-  
-    const song: Song = {
-        title: trackName,
-        artist: artistName,
-        album: albumName,
-        collaborators: allFeaturedArtists,
-    };
-  
+export const addTrackToPlaylist = (playlistName: string, song: Song, playlists: PlaylistData): void => {
+
     if (!playlists[playlistName]) {
         playlists[playlistName] = {
             name: playlistName,
@@ -158,9 +143,9 @@ function addTrackToPlaylist(playlistName: string, trackName: string, artistName:
             currentSongIndex: 0,
         };
     }
-  
+
     playlists[playlistName].songs.push(song);
-}
+};
 
 /**
  * Updates the Song Database and Playlist Database with the provided tracks and playlist name.
@@ -168,28 +153,29 @@ function addTrackToPlaylist(playlistName: string, trackName: string, artistName:
  * @param playlistName - The name of the playlist.
  * @param playlists - The Playlist Database object.
  * @param songDatabase - The Song Database object.
- * @returns void.
+ * @returns Void.
  */
-const updateSongsDbAndPlaylistsDb = (tracks: Array<any>, playlistName: string, playlists: PlaylistData, songDatabase: SongDatabase) => {
+export const updateSongsDbAndPlaylistsDb = (tracks: Array<any>, playlistName: string, playlists: PlaylistData, songDatabase: SongDatabase): void => {
     if (!Array.isArray(tracks)) {
         console.error('Invalid response format. Expected an array of tracks.');
         return;
     }
-  
+
     if (tracks.length === 0) {
         console.log('No tracks found in the playlist.');
         console.log();
         return;
     }
-  
+
     tracks.forEach((track) => {
         const trackName: string = track.track.name;
         const artistName: string = track.track.artists[0].name;
-        const albumName:string = track.track.album.name;
+        const albumName: string = track.track.album.name;
         const featuredArtists = extractFeaturedArtists(track);
-    
-        addTrackToSongDb(trackName, artistName, albumName, featuredArtists, songDatabase);
-        addTrackToPlaylist(playlistName, trackName, artistName, albumName, featuredArtists, playlists);
+        const song: Song = createSong(trackName, artistName, albumName, featuredArtists);
+
+        addTrackToSongDb(song, songDatabase);
+        addTrackToPlaylist(playlistName, song, playlists);
     });
 };
 

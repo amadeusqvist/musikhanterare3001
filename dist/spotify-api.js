@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.importPlaylist = void 0;
+exports.importPlaylist = exports.updateSongsDbAndPlaylistsDb = exports.addTrackToPlaylist = exports.addTrackToSongDb = exports.createSong = void 0;
 const axios_1 = __importDefault(require("axios"));
 const types_and_constants_1 = require("./types and constants");
 const menu_1 = require("./menu");
@@ -100,55 +100,46 @@ const getPlaylistTracks = (accessToken, playlistUri) => __awaiter(void 0, void 0
 /**
  * Extracts featured artists from a track object.
  * @param track - The track object.
- * @returns Array<string> - An array of featured artists.
+ * @returns - An array of featured artists.
  */
 const extractFeaturedArtists = (track) => {
-    const featuredArtists = track.track.artists.slice(1).map((artist) => artist.name);
-    return featuredArtists;
+    return track.track.artists.slice(1).map((artist) => artist.name);
 };
 /**
- * Adds a track to the Song Database.
+ * Creates a Song object based on track details.
  * @param trackName - The name of the track.
  * @param artistName - The name of the artist.
  * @param albumName - The name of the album.
  * @param featuredArtists - An array of featured artists.
- * @param songDatabase - The Song Database object.
- * @returns void.
+ * @returns - The Song object.
  */
-function addTrackToSongDb(trackName, artistName, albumName, featuredArtists, songDatabase) {
-    const allFeaturedArtists = [];
-    if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
-        allFeaturedArtists.push(...featuredArtists);
-    }
-    const song = {
+const createSong = (trackName, artistName, albumName, featuredArtists) => {
+    return {
         title: trackName,
         artist: artistName,
         album: albumName,
-        collaborators: allFeaturedArtists
+        collaborators: featuredArtists || [],
     };
+};
+exports.createSong = createSong;
+/**
+ * Adds a track to the Song Database.
+ * @param song - A song.
+ * @param songDatabase - The Song Database object.
+ * @returns Void.
+ */
+const addTrackToSongDb = (song, songDatabase) => {
     songDatabase.songs.push(song);
-}
+};
+exports.addTrackToSongDb = addTrackToSongDb;
 /**
  * Adds a track to a playlist in the Playlist Database.
  * @param playlistName - The name of the playlist.
- * @param trackName - The name of the track.
- * @param artistName - The name of the artist.
- * @param albumName - The name of the album.
- * @param featuredArtists - An array of featured artists.
+ * @param song - A song.
  * @param playlists - The Playlist Database object.
- * @returns void.
+ * @returns Void.
  */
-function addTrackToPlaylist(playlistName, trackName, artistName, albumName, featuredArtists, playlists) {
-    const allFeaturedArtists = [];
-    if (Array.isArray(featuredArtists) && featuredArtists.length > 0) {
-        allFeaturedArtists.push(...featuredArtists);
-    }
-    const song = {
-        title: trackName,
-        artist: artistName,
-        album: albumName,
-        collaborators: allFeaturedArtists,
-    };
+const addTrackToPlaylist = (playlistName, song, playlists) => {
     if (!playlists[playlistName]) {
         playlists[playlistName] = {
             name: playlistName,
@@ -157,14 +148,15 @@ function addTrackToPlaylist(playlistName, trackName, artistName, albumName, feat
         };
     }
     playlists[playlistName].songs.push(song);
-}
+};
+exports.addTrackToPlaylist = addTrackToPlaylist;
 /**
  * Updates the Song Database and Playlist Database with the provided tracks and playlist name.
  * @param tracks - An array of tracks to be added to the databases.
  * @param playlistName - The name of the playlist.
  * @param playlists - The Playlist Database object.
  * @param songDatabase - The Song Database object.
- * @returns void.
+ * @returns Void.
  */
 const updateSongsDbAndPlaylistsDb = (tracks, playlistName, playlists, songDatabase) => {
     if (!Array.isArray(tracks)) {
@@ -181,10 +173,12 @@ const updateSongsDbAndPlaylistsDb = (tracks, playlistName, playlists, songDataba
         const artistName = track.track.artists[0].name;
         const albumName = track.track.album.name;
         const featuredArtists = extractFeaturedArtists(track);
-        addTrackToSongDb(trackName, artistName, albumName, featuredArtists, songDatabase);
-        addTrackToPlaylist(playlistName, trackName, artistName, albumName, featuredArtists, playlists);
+        const song = (0, exports.createSong)(trackName, artistName, albumName, featuredArtists);
+        (0, exports.addTrackToSongDb)(song, songDatabase);
+        (0, exports.addTrackToPlaylist)(playlistName, song, playlists);
     });
 };
+exports.updateSongsDbAndPlaylistsDb = updateSongsDbAndPlaylistsDb;
 /**
  * Extracts the Spotify playlist URI from a given URL.
  * @param url - The URL of the Spotify playlist.
@@ -208,7 +202,7 @@ const importPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
             const playlistInfo = yield getPlaylistInfo(accessToken, playlistUri);
             const playlistName = playlistInfo.name;
             const playlistTracks = yield getPlaylistTracks(accessToken, playlistUri);
-            updateSongsDbAndPlaylistsDb(playlistTracks, playlistName, types_and_constants_1.playlists, types_and_constants_1.songData);
+            (0, exports.updateSongsDbAndPlaylistsDb)(playlistTracks, playlistName, types_and_constants_1.playlists, types_and_constants_1.songData);
         }
         catch (error) {
             console.log('An error occurred:', error);

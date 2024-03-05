@@ -4,6 +4,7 @@ const helperFunctions_1 = require("./controllers/helperFunctions");
 const types_and_constants_1 = require("./types and constants");
 const playControllers_1 = require("./controllers/playControllers");
 const playlistControllers_1 = require("./controllers/playlistControllers");
+const spotify_api_1 = require("./spotify-api");
 describe('Search Song Database', () => {
     const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
     const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
@@ -144,5 +145,40 @@ describe('Add Song Helper', () => {
         let matchingSongs = [song4, song5];
         (0, playlistControllers_1.addSongHelper)(playlistWithSongs, matchingSongs, 1);
         expect(playlistWithSongs.songs).toEqual([song1, song2, song3, song4]);
+    });
+});
+describe('Create Song', () => {
+    test('should create a song', () => {
+        const song = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+        const new_song = (0, spotify_api_1.createSong)('So What', 'Miles Davis', 'Kind Of Blue', ['John Coltrane']);
+        expect(new_song).toEqual(song);
+    });
+});
+describe('Add song to Playlist', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    let playlist1 = { name: 'Jazz', songs: [song1, song2, song3, song4], currentSongIndex: -1 };
+    let playlist2 = { name: 'Pop', songs: [], currentSongIndex: -1 };
+    let playlists = { Jazz: playlist1, Pop: playlist2 };
+    test('should add song5 to ', () => {
+        expect(playlists.pop.songs).not.toContain(song5);
+        (0, spotify_api_1.addTrackToPlaylist)("Pop", song5, playlists);
+        expect(playlists.pop.songs).toContain(song5);
+    });
+});
+describe('Add song to Song Database', () => {
+    const song1 = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2 = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3 = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
+    const songDatabase = { songs: [song1, song2, song3, song4] };
+    test('should add a song to the song DB', () => {
+        expect(songDatabase.songs).not.toContain(song5);
+        (0, spotify_api_1.addTrackToSongDb)(song5, songDatabase);
+        expect(songDatabase.songs).toContain(song5);
     });
 });

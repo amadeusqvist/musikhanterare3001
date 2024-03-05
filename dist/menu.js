@@ -56,8 +56,8 @@ function choosePlaylistMenu(playlists) {
         if ((0, helperFunctions_1.isValidPlaylistIndex)(index, playlistNames.length)) {
             const selectedPlaylistKey = playlistNames[index - 1];
             const selectedPlaylist = playlists[selectedPlaylistKey];
-            console.log(`Songs in playlist "${selectedPlaylist.name}":`);
             console.log();
+            console.log(`Songs in playlist "${selectedPlaylist.name}":`);
             (0, helperFunctions_1.printSongs)(selectedPlaylist.songs);
             playlistMenu(selectedPlaylist);
         }
@@ -89,6 +89,7 @@ function playlistMenu(selectedPlaylist) {
     console.log("[10] Change playlist");
     console.log();
     types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
+        console.log();
         if (answer === '1') {
             (0, playControllers_1.playPlaylistCallback)(selectedPlaylist);
         }

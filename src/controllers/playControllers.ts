@@ -1,4 +1,4 @@
-import { Playlist, rl, PlaylistData, Song } from "../types and constants";
+import { Playlist, rl, PlaylistData, Song } from "../dataHandler";
 import { playlistMenu } from "../menu";
 import { printSongsIndex, isValidSongIndex } from "./helperFunctions";
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SongDatabase, Song, songData, PlaylistData, playlists, rl } from './types and constants';
+import { SongDatabase, Song, songData, PlaylistData, playlists, rl } from './dataHandler';
 import { mainMenu } from './menu';
 
 //Spotify API client credentials

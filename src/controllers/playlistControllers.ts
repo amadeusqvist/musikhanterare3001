@@ -1,4 +1,4 @@
-import { Playlist, SongDatabase, Song, rl } from "../types and constants";
+import { Playlist, SongDatabase, Song, rl } from "../dataHandler";
 import { printSongsIndex, findMatchingSongs, printSongs, isValidSongIndex } from "./helperFunctions";
 import { playlistMenu } from "../menu";
 import { match } from "assert";

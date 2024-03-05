@@ -1,4 +1,4 @@
-import {rl, playlists, Playlist, PlaylistData, songData, songQueue} from './types and constants'
+import {rl, playlists, Playlist, PlaylistData, songData, songQueue} from './dataHandler'
 import { printPlaylists, printSongs, isValidPlaylistIndex, isPlaylistNameTaken, createNewPlaylist } from './controllers/helperFunctions';
 import { playPlaylistCallback, playNextSongCallback, playPreviousSongCallback, playSpecificSong, shuffleSongCallback} from './controllers/playControllers';
 import { addSong, removeSong, viewQueueCallback } from './controllers/playlistControllers';

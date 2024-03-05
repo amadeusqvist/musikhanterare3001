@@ -1,4 +1,4 @@
-import { SongDatabase, PlaylistData, Song, rl, Playlist } from "../types and constants";
+import { SongDatabase, PlaylistData, Song, rl, Playlist } from "../dataHandler";
 import * as fs from 'fs';
 import * as path from 'path';
 

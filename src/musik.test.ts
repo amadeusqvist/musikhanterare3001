@@ -1,5 +1,5 @@
 import { searchSongDatabase } from './controllers/helperFunctions'
-import { type Playlist, type Song, type SongDatabase, type PlaylistData, loadPlaylists, loadSongs } from './types and constants'
+import { type Playlist, type Song, type SongDatabase, type PlaylistData, loadPlaylists, loadSongs } from './dataHandler'
 import { playPlaylist, playNextSong, playPreviousSong, shuffleSong } from './controllers/playControllers'
 import { removeSongHelper, addSongHelper } from './controllers/playlistControllers';
 import { addTrackToPlaylist, addTrackToSongDb, createSong } from './spotify-api'

@@ -1,4 +1,4 @@
-import { searchSongDatabase } from './controllers/helperFunctions'
+import { searchSongDatabase, isPlaylistNameTaken, isValidPlaylistIndex, isValidSongIndex, createNewPlaylist } from './controllers/helperFunctions'
 import { type Playlist, type Song, type SongDatabase, type PlaylistData, loadPlaylists, loadSongs } from './dataHandler'
 import { playPlaylist, playNextSong, playPreviousSong, shuffleSong } from './controllers/playControllers'
 import { removeSongHelper, addSongHelper } from './controllers/playlistControllers';
@@ -230,3 +230,49 @@ describe('Add song to Song Database', () => {
         expect(songDatabase.songs).toContain(song5);
     });
 });
+
+describe('Is playlist name taken', () => {
+    let playlist1: Playlist = { name: 'Jazz', songs: [], currentSongIndex: -1 };
+
+    let playlists: PlaylistData = { Jazz: playlist1};
+
+    test('Should return true since Pop is not a taken playlist name', () => {
+        const result = isPlaylistNameTaken("Jazz", playlists);
+        expect(result).toBe(true);
+    })
+});
+
+describe('Is valid playlist index', () => {
+
+    test('Should return false since 5 is out of range', () => {
+        const result = isValidPlaylistIndex(5, 2);
+        expect(result).toBe(false);
+    });
+
+    test('Should return true since 1 is a valid Index', () => {
+        const result = isValidPlaylistIndex(1,2);
+        expect(result).toBe(true);
+    });
+});
+
+describe('Is valid song index', () => {
+
+    const song1: Song = { title: 'Money', artist: 'Pink Floyd', album: 'Dark side of the moon', collaborators: [] };
+    const song2: Song = { title: 'Giant Steps', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song3: Song = { title: 'Naima', artist: 'John Coltrane', album: 'Giant Steps', collaborators: [] };
+    const song4: Song = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
+    const song5: Song = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane']};
+
+    const songs: Array<Song> = [song1, song2, song3, song4, song5];
+
+    test('Should return false since 6 is out of range', () => {
+        const result = isValidSongIndex(6,songs);
+        expect(result).toBe(false);
+    });
+
+    test('Should return true since 1 is a valid Index', () => {
+        const result = isValidSongIndex(1,songs);
+        expect(result).toBe(true);
+    });
+});
+

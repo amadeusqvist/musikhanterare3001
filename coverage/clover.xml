@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709636926799" clover="3.2.0">
-  <project timestamp="1709636926799" name="All files">
-    <metrics statements="387" coveredstatements="138" conditionals="86" coveredconditionals="19" methods="63" coveredmethods="14" elements="536" coveredelements="171" complexity="0" loc="387" ncloc="387" packages="2" files="6" classes="6"/>
+<coverage generated="1709656399401" clover="3.2.0">
+  <project timestamp="1709656399401" name="All files">
+    <metrics statements="387" coveredstatements="141" conditionals="86" coveredconditionals="25" methods="63" coveredmethods="17" elements="536" coveredelements="183" complexity="0" loc="387" ncloc="387" packages="2" files="6" classes="6"/>
     <package name="src">
       <metrics statements="191" coveredstatements="48" conditionals="49" coveredconditionals="5" methods="29" coveredmethods="6"/>
       <file name="dataHandler.ts" path="C:\Users\sblom\PKD\musikhanterare3001\src\dataHandler.ts">
@@ -206,16 +206,16 @@
       </file>
     </package>
     <package name="src.controllers">
-      <metrics statements="196" coveredstatements="90" conditionals="37" coveredconditionals="14" methods="34" coveredmethods="8"/>
+      <metrics statements="196" coveredstatements="93" conditionals="37" coveredconditionals="20" methods="34" coveredmethods="11"/>
       <file name="helperFunctions.ts" path="C:\Users\sblom\PKD\musikhanterare3001\src\controllers\helperFunctions.ts">
-        <metrics statements="47" coveredstatements="22" conditionals="13" coveredconditionals="5" methods="13" coveredmethods="2"/>
+        <metrics statements="47" coveredstatements="25" conditionals="13" coveredconditionals="11" methods="13" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="12" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="12" count="2" type="cond" truecount="3" falsecount="0"/>
         <line num="21" count="1" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="22" count="2" type="cond" truecount="3" falsecount="0"/>
         <line num="31" count="1" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>

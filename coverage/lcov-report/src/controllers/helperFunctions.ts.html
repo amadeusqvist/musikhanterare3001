@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.89% </span>
+                <span class="strong">51.02% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/49</span>
+                <span class='fraction'>25/49</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">84.61% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>11/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">38.46% </span>
-                <span class="quiet">Branches</span>
+                <span class="quiet">Functions</span>
                 <span class='fraction'>5/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.38% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>2/13</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">46.8% </span>
+                <span class="strong">53.19% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/47</span>
+                <span class='fraction'>25/47</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -219,7 +219,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,7 +229,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,7 +239,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,8 +363,8 @@ import * as path from 'path';
  * @param songs - The array of songs in the playlist.
  * @returns Boolean indicating the validity of the song index.
  */
-export function <span class="fstat-no" title="function not covered" >isValidSongIndex(</span>songIndex: number, songs: Array&lt;Song&gt;): boolean {
-<span class="cstat-no" title="statement not covered" >    return !isNaN(songIndex) &amp;&amp; songIndex &gt; 0 &amp;&amp; songIndex &lt;= songs.length;</span>
+export function isValidSongIndex(songIndex: number, songs: Array&lt;Song&gt;): boolean {
+    return !isNaN(songIndex) &amp;&amp; songIndex &gt; 0 &amp;&amp; songIndex &lt;= songs.length;
 }
 &nbsp;
 /**
@@ -373,8 +373,8 @@ export function <span class="fstat-no" title="function not covered" >isValidSong
  * @param totalPlaylists - The total number of playlists.
  * @returns boolean - True if the index is valid, false otherwise.
  */
-export function <span class="fstat-no" title="function not covered" >isValidPlaylistIndex(</span>index: number, totalPlaylists: number): boolean {
-<span class="cstat-no" title="statement not covered" >    return !isNaN(index) &amp;&amp; index &gt; 0 &amp;&amp; index &lt;= totalPlaylists;</span>
+export function isValidPlaylistIndex(index: number, totalPlaylists: number): boolean {
+    return !isNaN(index) &amp;&amp; index &gt; 0 &amp;&amp; index &lt;= totalPlaylists;
 }
 &nbsp;
 /**
@@ -383,8 +383,8 @@ export function <span class="fstat-no" title="function not covered" >isValidPlay
  * @param playlists - The object containing all the playlists.
  * @returns boolean - True if the playlist name is taken, false otherwise.
  */
-export function <span class="fstat-no" title="function not covered" >isPlaylistNameTaken(</span>name: string, playlists: PlaylistData): boolean {
-<span class="cstat-no" title="statement not covered" >    return playlists[name] !== undefined;</span>
+export function isPlaylistNameTaken(name: string, playlists: PlaylistData): boolean {
+    return playlists[name] !== undefined;
 }
 &nbsp;
 /**
@@ -505,7 +505,7 @@ export function <span class="fstat-no" title="function not covered" >findMatchin
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-05T11:08:46.748Z
+                at 2024-03-05T16:33:19.358Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

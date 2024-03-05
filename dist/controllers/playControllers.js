@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shuffleSongCallback = exports.shuffleSong = exports.playPreviousSongCallback = exports.playPreviousSong = exports.playNextSongCallback = exports.playNextSong = exports.playSpecificSong = exports.playPlaylistCallback = exports.playPlaylist = void 0;
-const types_and_constants_1 = require("../types and constants");
+const dataHandler_1 = require("../dataHandler");
 const menu_1 = require("../menu");
 const helperFunctions_1 = require("./helperFunctions");
 /**
@@ -41,7 +41,7 @@ function playSpecificSong(selectedPlaylist) {
         return;
     }
     (0, helperFunctions_1.printSongsIndex)(songs);
-    types_and_constants_1.rl.question("Enter the number of the song you wish to play: ", (answer) => {
+    dataHandler_1.rl.question("Enter the number of the song you wish to play: ", (answer) => {
         const songIndex = parseInt(answer);
         if ((0, helperFunctions_1.isValidSongIndex)(songIndex, songs)) {
             const currentSong = songs[songIndex - 1];

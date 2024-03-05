@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makePlaylistMenu = exports.playlistMenu = exports.choosePlaylistMenu = exports.mainMenu = void 0;
-const types_and_constants_1 = require("./types and constants");
+const dataHandler_1 = require("./dataHandler");
 const helperFunctions_1 = require("./controllers/helperFunctions");
 const playControllers_1 = require("./controllers/playControllers");
 const playlistControllers_1 = require("./controllers/playlistControllers");
@@ -16,14 +16,14 @@ function mainMenu() {
     console.log("[2] Make Playlist");
     console.log("[3] Import Spotify playlist");
     console.log();
-    types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
+    dataHandler_1.rl.question("Enter your choice: ", (answer) => {
         if (answer === '1') {
             console.log();
-            choosePlaylistMenu(types_and_constants_1.playlists);
+            choosePlaylistMenu(dataHandler_1.playlists);
         }
         else if (answer === '2') {
             console.log();
-            makePlaylistMenu(types_and_constants_1.playlists);
+            makePlaylistMenu(dataHandler_1.playlists);
         }
         else if (answer === '3') {
             console.log();
@@ -51,7 +51,7 @@ function choosePlaylistMenu(playlists) {
         return;
     }
     (0, helperFunctions_1.printPlaylists)(playlists);
-    types_and_constants_1.rl.question("Enter the index of the playlist you want to choose: ", (answer) => {
+    dataHandler_1.rl.question("Enter the index of the playlist you want to choose: ", (answer) => {
         const index = parseInt(answer);
         if ((0, helperFunctions_1.isValidPlaylistIndex)(index, playlistNames.length)) {
             const selectedPlaylistKey = playlistNames[index - 1];
@@ -88,7 +88,7 @@ function playlistMenu(selectedPlaylist) {
     console.log("[9] Shuffle");
     console.log("[10] Change playlist");
     console.log();
-    types_and_constants_1.rl.question("Enter your choice: ", (answer) => {
+    dataHandler_1.rl.question("Enter your choice: ", (answer) => {
         console.log();
         if (answer === '1') {
             (0, playControllers_1.playPlaylistCallback)(selectedPlaylist);
@@ -97,22 +97,22 @@ function playlistMenu(selectedPlaylist) {
             (0, playControllers_1.playSpecificSong)(selectedPlaylist);
         }
         else if (answer === '3') {
-            (0, playControllers_1.playNextSongCallback)(selectedPlaylist, types_and_constants_1.playlists);
+            (0, playControllers_1.playNextSongCallback)(selectedPlaylist, dataHandler_1.playlists);
         }
         else if (answer === '4') {
             (0, playControllers_1.playPreviousSongCallback)(selectedPlaylist);
         }
         else if (answer === '5') {
-            (0, playlistControllers_1.addSong)(selectedPlaylist, types_and_constants_1.songData, selectedPlaylist);
+            (0, playlistControllers_1.addSong)(selectedPlaylist, dataHandler_1.songData, selectedPlaylist);
         }
         else if (answer === '6') {
             (0, playlistControllers_1.removeSong)(selectedPlaylist);
         }
         else if (answer === '7') {
-            (0, playlistControllers_1.addSong)(types_and_constants_1.songQueue, types_and_constants_1.songData, selectedPlaylist);
+            (0, playlistControllers_1.addSong)(dataHandler_1.songQueue, dataHandler_1.songData, selectedPlaylist);
         }
         else if (answer === '8') {
-            (0, playlistControllers_1.viewQueueCallback)(selectedPlaylist, types_and_constants_1.songQueue);
+            (0, playlistControllers_1.viewQueueCallback)(selectedPlaylist, dataHandler_1.songQueue);
         }
         else if (answer === '9') {
             (0, playControllers_1.shuffleSongCallback)(selectedPlaylist);
@@ -135,7 +135,7 @@ exports.playlistMenu = playlistMenu;
  * @returns Void.
  */
 function makePlaylistMenu(playlists) {
-    types_and_constants_1.rl.question("Give the new playlist a name: ", (playlistName) => {
+    dataHandler_1.rl.question("Give the new playlist a name: ", (playlistName) => {
         if ((0, helperFunctions_1.isPlaylistNameTaken)(playlistName, playlists)) {
             console.log("Playlist name already exists.");
             console.log();

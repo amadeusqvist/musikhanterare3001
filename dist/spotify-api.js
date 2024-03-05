@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.importPlaylist = exports.updateSongsDbAndPlaylistsDb = exports.addTrackToPlaylist = exports.addTrackToSongDb = exports.createSong = void 0;
 const axios_1 = __importDefault(require("axios"));
-const types_and_constants_1 = require("./types and constants");
+const dataHandler_1 = require("./dataHandler");
 const menu_1 = require("./menu");
 //Spotify API client credentials
 const clientId = 'b878d0f2353a473d90be7c966a105d09';
@@ -129,7 +129,12 @@ exports.createSong = createSong;
  * @returns Void.
  */
 const addTrackToSongDb = (song, songDatabase) => {
-    songDatabase.songs.push(song);
+    const existingSongIndex = songDatabase.songs.findIndex(existingSong => existingSong.title === song.title &&
+        existingSong.artist === song.artist &&
+        existingSong.album === song.album);
+    if (existingSongIndex === -1) {
+        songDatabase.songs.push(song);
+    }
 };
 exports.addTrackToSongDb = addTrackToSongDb;
 /**
@@ -195,14 +200,14 @@ function extractPlaylistURI(url) {
  * @returns void.
  */
 const importPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
-    types_and_constants_1.rl.question("Enter the URL to a Spotify playlist: ", (url) => __awaiter(void 0, void 0, void 0, function* () {
+    dataHandler_1.rl.question("Enter the URL to a Spotify playlist: ", (url) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const playlistUri = extractPlaylistURI(url);
             const accessToken = yield getToken();
             const playlistInfo = yield getPlaylistInfo(accessToken, playlistUri);
             const playlistName = playlistInfo.name;
             const playlistTracks = yield getPlaylistTracks(accessToken, playlistUri);
-            (0, exports.updateSongsDbAndPlaylistsDb)(playlistTracks, playlistName, types_and_constants_1.playlists, types_and_constants_1.songData);
+            (0, exports.updateSongsDbAndPlaylistsDb)(playlistTracks, playlistName, dataHandler_1.playlists, dataHandler_1.songData);
         }
         catch (error) {
             console.log('An error occurred:', error);

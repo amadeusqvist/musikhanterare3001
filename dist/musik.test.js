@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const helperFunctions_1 = require("./controllers/helperFunctions");
-const types_and_constants_1 = require("./types and constants");
+const dataHandler_1 = require("./dataHandler");
 const playControllers_1 = require("./controllers/playControllers");
 const playlistControllers_1 = require("./controllers/playlistControllers");
 const spotify_api_1 = require("./spotify-api");
@@ -36,13 +36,13 @@ describe('Search Song Database', () => {
 });
 describe('Load Playlist', () => {
     test('should load playlists', () => {
-        const playlists = (0, types_and_constants_1.loadPlaylists)();
+        const playlists = (0, dataHandler_1.loadPlaylists)();
         expect(playlists).toBeDefined();
     });
 });
 describe('Load Song Data', () => {
     test('should load songs data', () => {
-        const songsdata = (0, types_and_constants_1.loadSongs)();
+        const songsdata = (0, dataHandler_1.loadSongs)();
         expect(songsdata).toBeDefined();
     });
 });
@@ -164,9 +164,9 @@ describe('Add song to Playlist', () => {
     let playlist2 = { name: 'Pop', songs: [], currentSongIndex: -1 };
     let playlists = { Jazz: playlist1, Pop: playlist2 };
     test('should add song5 to ', () => {
-        expect(playlists.pop.songs).not.toContain(song5);
+        expect(playlists.Pop.songs).not.toContain(song5);
         (0, spotify_api_1.addTrackToPlaylist)("Pop", song5, playlists);
-        expect(playlists.pop.songs).toContain(song5);
+        expect(playlists.Pop.songs).toContain(song5);
     });
 });
 describe('Add song to Song Database', () => {
@@ -176,7 +176,7 @@ describe('Add song to Song Database', () => {
     const song4 = { title: "In 'N Out", artist: 'Joe Henderson', album: "In 'N Out", collaborators: [] };
     const song5 = { title: 'So What', artist: 'Miles Davis', album: 'Kind Of Blue', collaborators: ['John Coltrane'] };
     const songDatabase = { songs: [song1, song2, song3, song4] };
-    test('should add a song to the song DB', () => {
+    test('should add song5 to the songDatabase', () => {
         expect(songDatabase.songs).not.toContain(song5);
         (0, spotify_api_1.addTrackToSongDb)(song5, songDatabase);
         expect(songDatabase.songs).toContain(song5);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeSongHelper = exports.removeSong = exports.addSongHelper = exports.addSong = exports.viewQueueCallback = exports.viewQueue = void 0;
-const types_and_constants_1 = require("../types and constants");
+const dataHandler_1 = require("../dataHandler");
 const helperFunctions_1 = require("./helperFunctions");
 const menu_1 = require("../menu");
 /**
@@ -43,7 +43,7 @@ function addSong(selectedPlaylist, songDatabase, returnPlaylist) {
         console.log("Matching songs:");
         console.log();
         (0, helperFunctions_1.printSongsIndex)(matchingSongs);
-        types_and_constants_1.rl.question("Enter the number of the song you wish to add: ", (answer) => {
+        dataHandler_1.rl.question("Enter the number of the song you wish to add: ", (answer) => {
             const songIndex = parseInt(answer);
             if ((0, helperFunctions_1.isValidSongIndex)(songIndex, matchingSongs)) {
                 addSongCallback(selectedPlaylist, matchingSongs, returnPlaylist, songIndex);
@@ -91,7 +91,7 @@ function removeSong(selectedPlaylist) {
     console.log(`Songs in playlist ${name}:`);
     console.log();
     (0, helperFunctions_1.printSongsIndex)(songs);
-    types_and_constants_1.rl.question("Enter the index of the song you want to remove: ", (answer) => {
+    dataHandler_1.rl.question("Enter the index of the song you want to remove: ", (answer) => {
         const songIndex = parseInt(answer);
         if ((0, helperFunctions_1.isValidSongIndex)(songIndex, songs)) {
             removeSongHelperCallback(selectedPlaylist, songIndex);

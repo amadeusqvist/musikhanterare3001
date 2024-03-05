@@ -124,8 +124,16 @@ export const createSong = (trackName: string, artistName: string, albumName: str
  * @returns Void.
  */
 export const addTrackToSongDb = (song: Song, songDatabase: SongDatabase): void => {
-    songDatabase.songs.push(song);
-};
+    const existingSongIndex = songDatabase.songs.findIndex(existingSong =>
+        existingSong.title === song.title &&
+        existingSong.artist === song.artist &&
+        existingSong.album === song.album
+    );
+
+    if (existingSongIndex === -1) {
+        songDatabase.songs.push(song);
+    }
+}
 
 /**
  * Adds a track to a playlist in the Playlist Database.

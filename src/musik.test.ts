@@ -218,6 +218,12 @@ describe('Add song to Song Database', () => {
     
     const songDatabase: SongDatabase = { songs: [song1, song2, song3, song4] };
 
+    test('should not add song3 to the songDatabase since it is a duplicate', () => {
+        expect(songDatabase.songs).toContain(song3);
+        addTrackToSongDb(song3, songDatabase );
+        expect(songDatabase.songs.length).toEqual(4);
+    });
+
     test('should add song5 to the songDatabase', () => {
         expect(songDatabase.songs).not.toContain(song5);
         addTrackToSongDb(song5, songDatabase );

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findMatchingSongs = exports.searchSongDatabase = exports.printPlaylists = exports.printSongsIndex = exports.printSongs = exports.createNewPlaylist = exports.isPlaylistNameTaken = exports.isValidPlaylistIndex = exports.isValidSongIndex = void 0;
-const types_and_constants_1 = require("../types and constants");
+const dataHandler_1 = require("../dataHandler");
 /**
  * Checks if the provided song index is valid.
  * @param songIndex - The index of the song.
@@ -118,7 +118,7 @@ exports.searchSongDatabase = searchSongDatabase;
  */
 function findMatchingSongs(songDatabase, callback) {
     const askQuestion = () => {
-        types_and_constants_1.rl.question("Search after a song: ", (answer) => {
+        dataHandler_1.rl.question("Search after a song: ", (answer) => {
             const searchTerm = answer.trim();
             const matchingSongs = searchSongDatabase(songDatabase, searchTerm);
             if (matchingSongs.length === 0) {
